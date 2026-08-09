@@ -1,0 +1,37 @@
+name: Feature request
+description: Propose a component, adapter, workflow, or usability improvement
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: teaching_problem
+    attributes:
+      label: Teaching or visualization problem
+      description: What should a speaker or viewer be able to understand more easily?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_outcome
+    attributes:
+      label: Proposed outcome
+      description: Describe the desired API and what should appear on screen.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example use
+      description: A short scene sketch, data model, wireframe, or reference is useful.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: How are you solving this today, and where does that approach fall short?
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: The request is for deterministic visualization, not for executing or sandboxing binaries.
+          required: true
+        - label: Any attached material is safe and redistributable.
+          required: true

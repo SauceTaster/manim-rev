@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080b12">
+    <meta
+      name="description"
+      content="Explore 39 reviewed Manim Rev scenes for reverse engineering, debugging, CPU behavior, fuzzing, symbolic execution, and vulnerability research."
+    >
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Manim Rev example gallery">
+    <meta property="og:description" content="39 deterministic scenes built for reverse-engineering and security talks.">
+    <meta property="og:url" content="https://saucetaster.github.io/manim-rev/examples.html">
+    <meta property="og:image" content="https://saucetaster.github.io/manim-rev/assets/analysis.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Examples — Manim Rev</title>
+    <link rel="canonical" href="https://saucetaster.github.io/manim-rev/examples.html">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="shell nav-shell">
+        <a class="brand" href="./" aria-label="Manim Rev home">
+          <span class="brand-mark" aria-hidden="true">MR</span>
+          <span>manim<span class="brand-accent">_rev</span></span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="./">Overview</a>
+          <a aria-current="page" href="examples.html">Examples</a>
+          <a href="https://github.com/SauceTaster/manim-rev/tree/main/docs">Docs</a>
+          <a class="nav-github" href="https://github.com/SauceTaster/manim-rev">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="page-hero shell" aria-labelledby="examples-title">
+        <p class="eyebrow">39 scenes · four collections</p>
+        <h1 id="examples-title">Start with a story.<br><span>Then make it yours.</span></h1>
+        <p>
+          Every example is a focused talk beat with a stated teaching intent—not a
+          kitchen-sink feature demo. Browse the reviewed endpoints below, watch six
+          representative animations, then open the source for the exact composition.
+        </p>
+        <nav class="anchor-nav" aria-label="Example categories">
+          <a href="#demos">Playable demos</a>
+          <a href="#analysis">Analysis &amp; debugging</a>
+          <a href="#core">Integrated showcases</a>
+          <a href="#security">CPU &amp; security</a>
+          <a href="#stress">Layout stress</a>
+        </nav>
+      </section>
+
+      <section class="section section-muted" id="demos" aria-labelledby="demos-title">
+        <div class="shell">
+          <div class="section-intro split-intro">
+            <div><p class="eyebrow">Playable examples</p><h2 id="demos-title">See the narrative unfold.</h2></div>
+            <p>Use the native controls to scrub each scene. Videos are muted and never autoplay.</p>
+          </div>
+          <div class="video-grid">
+            <article class="video-card">
+              <video aria-label="Reverse-engineering showcase animation" controls muted preload="metadata" playsinline poster="assets/core.png"><source src="assets/demos/reverse-engineering.mp4" type="video/mp4"><a href="assets/demos/reverse-engineering.mp4">Download the reverse-engineering showcase video.</a></video>
+              <div class="video-copy"><span>Integrated</span><h3>Reverse-engineering showcase</h3><p>Connect control flow, machine state, and memory.</p><a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/showcase.py">Open source <span aria-hidden="true">↗</span></a></div>
+            </article>
+            <article class="video-card">
+              <video aria-label="Debugger trace to memory animation" controls muted preload="metadata" playsinline poster="assets/analysis.png"><source src="assets/demos/debugger-memory.mp4" type="video/mp4"><a href="assets/demos/debugger-memory.mp4">Download the debugger-memory walkthrough video.</a></video>
+              <div class="video-copy"><span>Debugging</span><h3>Breakpoint to exact byte</h3><p>Follow one store from trace row to stack memory.</p><a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/debugger_walkthrough.py">Open source <span aria-hidden="true">↗</span></a></div>
+            </article>
+            <article class="video-card">
+              <video aria-label="Pipeline branch misprediction animation" controls muted preload="metadata" playsinline poster="assets/security.png"><source src="assets/demos/pipeline-mispredict.mp4" type="video/mp4"><a href="assets/demos/pipeline-mispredict.mp4">Download the pipeline-mispredict video.</a></video>
+              <div class="video-copy"><span>CPU</span><h3>Branch mispredict squash</h3><p>Make the flush cycle and wrong path explicit.</p><a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/security/pipeline_hazards.py">Open source <span aria-hidden="true">↗</span></a></div>
+            </article>
+            <article class="video-card">
+              <video aria-label="Fuzzing coverage campaign animation" controls muted preload="metadata" playsinline poster="assets/security.png"><source src="assets/demos/fuzzing-campaign.mp4" type="video/mp4"><a href="assets/demos/fuzzing-campaign.mp4">Download the fuzzing-campaign video.</a></video>
+              <div class="video-copy"><span>Fuzzing</span><h3>Coverage growth campaign</h3><p>Reveal the edge that earns an input a corpus slot.</p><a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/security/fuzzing_campaigns.py">Open source <span aria-hidden="true">↗</span></a></div>
+            </article>
+            <article class="video-card">
+              <video aria-label="Symbolic execution fork animation" controls muted preload="metadata" playsinline poster="assets/security.png"><source src="assets/demos/symbolic-fork.mp4" type="video/mp4"><a href="assets/demos/symbolic-fork.mp4">Download the symbolic-fork video.</a></video>
+              <div class="video-copy"><span>Symbolic</span><h3>Fork and constrain</h3><p>Carry path predicates to a solver result.</p><a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/security/symbolic_execution.py">Open source <span aria-hidden="true">↗</span></a></div>
+            </article>
+            <article class="video-card">
+              <video aria-label="Stack overwrite animation" controls muted preload="metadata" playsinline poster="assets/security.png"><source src="assets/demos/stack-overflow.mp4" type="video/mp4"><a href="assets/demos/stack-overflow.mp4">Download the stack-overflow video.</a></video>
+              <div class="video-copy"><span>Vulnerability</span><h3>Stack overwrite</h3><p>Track attacker-controlled bytes to saved control flow.</p><a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/security/vulnerability_stories.py">Open source <span aria-hidden="true">↗</span></a></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell gallery-section" id="gallery" aria-labelledby="gallery-title">
+        <div class="section-intro">
+          <p class="eyebrow">Reviewed gallery</p>
+          <h2 id="gallery-title">Every scene, sampled and inspected.</h2>
+          <p>Each contact sheet shows the final frame. Open a timeline to compare the early, middle, and final state of every scene in that collection.</p>
+        </div>
+
+        <article class="gallery-row" id="analysis">
+          <a class="gallery-image" href="assets/analysis-timeline.png" aria-label="Open the full analysis and debugging timeline contact sheet">
+            <img src="assets/analysis.png" width="1329" height="1172" alt="Final-frame contact sheet for twelve analysis and debugging scenes" loading="lazy">
+          </a>
+          <div class="gallery-copy">
+            <span class="collection-count">12 scenes</span>
+            <h3>Analysis &amp; debugging</h3>
+            <p>Recover decisions, follow execution, resolve addresses, and connect source to machine behavior.</p>
+            <ul class="scene-list">
+              <li>Loop, call, jump-table, and trace-backed CFG recovery</li>
+              <li>Breakpoints, repeated hits, and read-modify-write traces</li>
+              <li>Protocol bytes, process mappings, and semantic patch views</li>
+              <li>Source lowering, incoming xrefs, and root-cause triangulation</li>
+            </ul>
+            <div class="gallery-links">
+              <a class="text-link" href="assets/analysis-timeline.png">Open timeline <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/SauceTaster/manim-rev/tree/main/examples/analysis">Browse source <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="gallery-row reverse" id="core">
+          <a class="gallery-image" href="assets/core-timeline.png" aria-label="Open the full integrated showcase timeline contact sheet">
+            <img src="assets/core.png" width="1329" height="882" alt="Final-frame contact sheet for seven integrated showcase scenes" loading="lazy">
+          </a>
+          <div class="gallery-copy">
+            <span class="collection-count">7 scenes</span>
+            <h3>Integrated showcases</h3>
+            <p>See components compose into complete presentation beats before choosing the smallest pieces for your own scene.</p>
+            <ul class="scene-list">
+              <li>Reverse-engineering, pipeline, fuzzing, symbolic, and vulnerability tours</li>
+              <li>Breakpoint-to-memory and source-to-xref walkthroughs</li>
+              <li>Semantic linking across independently laid-out views</li>
+            </ul>
+            <div class="gallery-links">
+              <a class="text-link" href="assets/core-timeline.png">Open timeline <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/showcase.py">Browse source <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="gallery-row" id="security">
+          <a class="gallery-image" href="assets/security-timeline.png" aria-label="Open the full CPU and security timeline contact sheet">
+            <img src="assets/security.png" width="1329" height="1172" alt="Final-frame contact sheet for twelve CPU and security scenes" loading="lazy">
+          </a>
+          <div class="gallery-copy">
+            <span class="collection-count">12 scenes</span>
+            <h3>CPU &amp; security</h3>
+            <p>Move from bytes and microarchitecture to testing strategy, symbolic reasoning, and vulnerability impact.</p>
+            <ul class="scene-list">
+              <li>Instruction decode, branch flags, CPU data paths, and pipeline hazards</li>
+              <li>Coverage campaigns, crash triage, and corpus decisions</li>
+              <li>Symbolic forks, constraints, solver states, and stashes</li>
+              <li>Stack corruption, taint-to-sink flow, and finding triage</li>
+            </ul>
+            <div class="gallery-links">
+              <a class="text-link" href="assets/security-timeline.png">Open timeline <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/SauceTaster/manim-rev/tree/main/examples/security">Browse source <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="gallery-row reverse" id="stress">
+          <a class="gallery-image" href="assets/stress-timeline.png" aria-label="Open the full layout stress timeline contact sheet">
+            <img src="assets/stress.png" width="1329" height="882" alt="Final-frame contact sheet for eight layout stress scenes" loading="lazy">
+          </a>
+          <div class="gallery-copy">
+            <span class="collection-count">8 scenes</span>
+            <h3>Layout stress</h3>
+            <p>Regression scenes deliberately pressure labels, rows, mappings, traces, workbench grids, and pipeline capacity.</p>
+            <ul class="scene-list">
+              <li>x86-64, AArch64, and RV64 register sets</li>
+              <li>Cross-row writes and long process-map labels</li>
+              <li>Trace viewports, multi-access instructions, and odd pane counts</li>
+              <li>Eight overlapping pipeline instructions with stalls and squashes</li>
+            </ul>
+            <div class="gallery-links">
+              <a class="text-link" href="assets/stress-timeline.png">Open timeline <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/SauceTaster/manim-rev/blob/main/examples/stress/component_limits.py">Browse source <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section section-muted" aria-labelledby="render-title">
+        <div class="shell render-grid">
+          <div>
+            <p class="eyebrow">Reproduce the corpus</p>
+            <h2 id="render-title">Run one scene—or all 39.</h2>
+            <p>
+              The repository includes a parallel renderer and a visual-QA harness. The
+              renderer isolates Manim caches and records failures and timeouts; the QA
+              pass samples three frames from every scene and creates these same sheets.
+            </p>
+            <p class="small-print">Quality checks are review prompts, not substitutes for technical and editorial judgment.</p>
+          </div>
+          <div class="code-window compact-code">
+            <div class="code-title"><span>Terminal</span><span>repository root</span></div>
+            <pre><code><span class="code-comment"># Discover the complete inventory</span>
+uv run python scripts/render_examples.py --list
+
+<span class="code-comment"># Render in isolated workers</span>
+uv run python scripts/render_examples.py --jobs 2
+
+<span class="code-comment"># Sample and review frames</span>
+uv run python scripts/qa_examples.py</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band" aria-labelledby="example-cta-title">
+        <div class="shell cta-inner">
+          <div><p class="eyebrow">Your evidence, your pacing</p><h2 id="example-cta-title">Use these as starting points.</h2><p>Replace the sample addresses, code, and findings with the real material from your talk.</p></div>
+          <div class="button-row"><a class="button button-primary" href="https://github.com/SauceTaster/manim-rev/tree/main/examples">Open all examples <span aria-hidden="true">↗</span></a><a class="button button-secondary" href="https://github.com/SauceTaster/manim-rev/blob/main/docs/guide.md">Component guide</a></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">MR</span><span>manim<span class="brand-accent">_rev</span></span></a><p>Composable visuals for reverse-engineering and security education.</p></div>
+        <nav aria-label="Project links"><a href="./">Overview</a><a href="https://github.com/SauceTaster/manim-rev/tree/main/docs">Documentation</a><a href="https://github.com/SauceTaster/manim-rev/issues">Issues</a><a href="https://github.com/SauceTaster/manim-rev/blob/main/LICENSE">MIT license</a></nav>
+      </div>
+    </footer>
+  </body>
+</html>

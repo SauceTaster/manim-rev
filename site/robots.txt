@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://saucetaster.github.io/manim-rev/sitemap.xml

@@ -1,0 +1,202 @@
+"""Manim Community visuals for reverse-engineering and security talks."""
+
+from __future__ import annotations
+
+from importlib.metadata import PackageNotFoundError, version
+
+from .adapters import (
+    cfg_from_angr,
+    cfg_from_ghidra_json,
+    instruction_from_capstone,
+    instructions_from_capstone,
+    trace_events_from_records,
+)
+from .architecture import (
+    AARCH64,
+    RV64,
+    X86_64,
+    ArchitectureSpec,
+    Endianness,
+    FlagSpec,
+    RegisterSpec,
+)
+from .cfg import BasicBlock, ControlFlowGraph
+from .cpu import (
+    CPUBlockDiagram,
+    FlagRegister,
+    InstructionEncoding,
+    InstructionField,
+    InstructionView,
+    PipelineDiagram,
+    RegisterBank,
+)
+from .fuzzing import CoverageBitmap, CoverageMap, CrashCard, FuzzingDashboard, HitValues
+from .memory import (
+    HexAddressCell,
+    HexAsciiCell,
+    HexByteCell,
+    HexDump,
+    HexDumpRow,
+    MemoryMap,
+    MemorySegment,
+)
+from .models import (
+    AccessKind,
+    Address,
+    BasicBlockSpec,
+    CFGEdgeSpec,
+    EdgeKind,
+    InstructionSpec,
+    MemoryAccess,
+    MemorySegmentSpec,
+    PipelineInstruction,
+    StateStatus,
+    SymbolicEdgeSpec,
+    SymbolicStateSpec,
+    TraceEvent,
+    TracePhase,
+    XRefSpec,
+    format_address,
+)
+from .primitives import KeyValueRow, Panel, StatusDot, label_text, mono_text
+from .refs import (
+    AddressRangeRef,
+    AddressRef,
+    BlockRef,
+    ExecutedAddressRef,
+    FlagRef,
+    MemoryAddressRef,
+    MemoryRangeRef,
+    PipelineSlotRef,
+    RefResolver,
+    RegisterRef,
+    SourceRef,
+    SymbolicStateRef,
+    VisualRef,
+    focus_across,
+)
+from .scene import RevScene
+from .source import (
+    CrossReferencePanel,
+    SourceAssemblyLinkSpec,
+    SourceAssemblyMap,
+    SourceListing,
+)
+from .symbolic import (
+    ConstraintPanel,
+    StashPanel,
+    StashValue,
+    SymbolicExecutionTree,
+    SymbolicStateNode,
+)
+from .theme import DEFAULT_THEME, RevTheme, light_theme
+from .trace import ExecutionTrace, MemoryAccessBadge, TraceRow, TraceTimeline
+from .vulnerability import (
+    StackFrame,
+    StackOverflowDiagram,
+    TaintFlow,
+    TaintFlowDiagram,
+    VulnerabilityCard,
+)
+from .workbench import AnalysisWorkbench, DebuggerWorkbench, ReferenceLink
+
+try:
+    __version__ = version("manim-rev")
+except PackageNotFoundError:  # pragma: no cover - only for unpackaged source trees
+    __version__ = "0.1.0"
+
+__all__ = [
+    "AARCH64",
+    "DEFAULT_THEME",
+    "RV64",
+    "X86_64",
+    "AccessKind",
+    "Address",
+    "AddressRangeRef",
+    "AddressRef",
+    "AnalysisWorkbench",
+    "ArchitectureSpec",
+    "BasicBlock",
+    "BasicBlockSpec",
+    "BlockRef",
+    "CFGEdgeSpec",
+    "CPUBlockDiagram",
+    "ConstraintPanel",
+    "ControlFlowGraph",
+    "CoverageBitmap",
+    "CoverageMap",
+    "CrashCard",
+    "CrossReferencePanel",
+    "DebuggerWorkbench",
+    "EdgeKind",
+    "Endianness",
+    "ExecutedAddressRef",
+    "ExecutionTrace",
+    "FlagRef",
+    "FlagRegister",
+    "FlagSpec",
+    "FuzzingDashboard",
+    "HexAddressCell",
+    "HexAsciiCell",
+    "HexByteCell",
+    "HexDump",
+    "HexDumpRow",
+    "HitValues",
+    "InstructionEncoding",
+    "InstructionField",
+    "InstructionSpec",
+    "InstructionView",
+    "KeyValueRow",
+    "MemoryAccess",
+    "MemoryAccessBadge",
+    "MemoryAddressRef",
+    "MemoryMap",
+    "MemoryRangeRef",
+    "MemorySegment",
+    "MemorySegmentSpec",
+    "Panel",
+    "PipelineDiagram",
+    "PipelineInstruction",
+    "PipelineSlotRef",
+    "RefResolver",
+    "ReferenceLink",
+    "RegisterBank",
+    "RegisterRef",
+    "RegisterSpec",
+    "RevScene",
+    "RevTheme",
+    "SourceAssemblyLinkSpec",
+    "SourceAssemblyMap",
+    "SourceListing",
+    "SourceRef",
+    "StackFrame",
+    "StackOverflowDiagram",
+    "StashPanel",
+    "StashValue",
+    "StateStatus",
+    "StatusDot",
+    "SymbolicEdgeSpec",
+    "SymbolicExecutionTree",
+    "SymbolicStateNode",
+    "SymbolicStateRef",
+    "SymbolicStateSpec",
+    "TaintFlow",
+    "TaintFlowDiagram",
+    "TraceEvent",
+    "TracePhase",
+    "TraceRow",
+    "TraceTimeline",
+    "VisualRef",
+    "VulnerabilityCard",
+    "XRefSpec",
+    "cfg_from_angr",
+    "cfg_from_ghidra_json",
+    "focus_across",
+    "format_address",
+    "instruction_from_capstone",
+    "instructions_from_capstone",
+    "label_text",
+    "light_theme",
+    "mono_text",
+    "trace_events_from_records",
+]

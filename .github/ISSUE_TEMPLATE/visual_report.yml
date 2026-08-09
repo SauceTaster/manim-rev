@@ -1,0 +1,52 @@
+name: Visual readability report
+description: Report clipping, overlap, contrast, density, timing, or unclear teaching intent
+title: "[Visual]: "
+body:
+  - type: input
+    id: scene
+    attributes:
+      label: Scene and component
+      placeholder: "examples/showcase.py::PipelineShowcase — PipelineDiagram"
+    validations:
+      required: true
+  - type: textarea
+    id: intent
+    attributes:
+      label: Intended takeaway
+      description: What should the audience understand at this moment?
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Readability or communication problem
+      description: Describe what is clipped, ambiguous, too dense, mistimed, or technically misleading.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Visual evidence
+      description: Drag in a representative frame or short render and identify the timestamp if relevant.
+    validations:
+      required: true
+  - type: input
+    id: output
+    attributes:
+      label: Output settings
+      description: Resolution, aspect ratio, quality, and renderer
+      placeholder: "1920x1080, 16:9, -qh, Cairo"
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: "manim-rev 0.1.0; Manim CE 0.20.1; Python 3.12.3"
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: Optional — explain what would make the visual clearer without changing its intent.

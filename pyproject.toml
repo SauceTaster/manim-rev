@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "manim-rev"
+version = "0.1.0"
+description = "Manim Community Edition visuals for reverse-engineering and security talks"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Manim Rev contributors" }]
+maintainers = [{ name = "SauceTaster" }]
+keywords = [
+  "manim",
+  "reverse-engineering",
+  "binary-analysis",
+  "security",
+  "visualization",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia :: Graphics :: Presentation",
+  "Topic :: Security",
+  "Typing :: Typed",
+]
+dependencies = ["manim>=0.20.1,<0.21"]
+
+[project.urls]
+Homepage = "https://saucetaster.github.io/manim-rev/"
+Documentation = "https://saucetaster.github.io/manim-rev/"
+Repository = "https://github.com/SauceTaster/manim-rev"
+Issues = "https://github.com/SauceTaster/manim-rev/issues"
+Changelog = "https://github.com/SauceTaster/manim-rev/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.15",
+  "pytest>=8.3",
+  "pytest-cov>=6",
+  "ruff>=0.11",
+]
+analysis = ["capstone>=5"]
+angr = ["angr>=9.2"]
+
+[project.entry-points."manim.plugins"]
+manim_rev = "manim_rev"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/manim_rev"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/site"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests", "examples", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/manim_rev"]
+ignore_missing_imports = true
+check_untyped_defs = true
+follow_imports = "skip"

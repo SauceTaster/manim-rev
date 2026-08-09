@@ -1,0 +1,153 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_COLOR: "1"
+
+jobs:
+  tests:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
+          - "3.14"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Manim system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential python3-dev libcairo2-dev libpango1.0-dev pkg-config
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: Sync locked environment
+        run: uv sync --frozen --extra dev
+
+      - name: Run tests
+        run: uv run pytest
+
+  quality:
+    name: Static, coverage, and render checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Manim system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential python3-dev libcairo2-dev libpango1.0-dev pkg-config
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Sync locked environment
+        run: uv sync --frozen --extra dev
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Type-check public package
+        run: uv run mypy
+
+      - name: Measure coverage
+        run: uv run pytest --cov=manim_rev --cov-report=term-missing --cov-report=xml
+
+      - name: Validate example inventory
+        run: uv run python scripts/render_examples.py --list
+
+      - name: Validate GitHub Pages assets and links
+        run: uv run python scripts/check_site.py site
+
+      - name: Smoke-render a representative scene
+        run: |
+          uv run python scripts/render_examples.py \
+            --match ReverseEngineeringShowcase \
+            --save-last-frame \
+            --timeout 300
+
+      - name: Upload smoke-render evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: smoke-render
+          path: |
+            build/example-renders
+            build/qa
+          if-no-files-found: warn
+          retention-days: 7
+
+  package:
+    name: Build and inspect distributions
+    needs:
+      - tests
+      - quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Manim system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential python3-dev libcairo2-dev libpango1.0-dev pkg-config
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Build wheel and source archive
+        run: uv build
+
+      - name: Validate distribution metadata
+        run: uvx --from twine==6.2.0 twine check --strict dist/*
+
+      - name: Test the wheel in a clean environment
+        run: |
+          uv venv --python 3.12 "${RUNNER_TEMP}/manim-rev-package-test"
+          uv pip install --python "${RUNNER_TEMP}/manim-rev-package-test/bin/python" dist/*.whl
+          "${RUNNER_TEMP}/manim-rev-package-test/bin/python" - <<'PY'
+          from importlib.metadata import entry_points, version
+
+          import manim_rev
+
+          assert version("manim-rev") == manim_rev.__version__
+          plugins = [ep for ep in entry_points(group="manim.plugins") if ep.name == "manim_rev"]
+          assert len(plugins) == 1
+          assert plugins[0].load().__name__ == "manim_rev"
+          PY

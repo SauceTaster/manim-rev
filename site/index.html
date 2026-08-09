@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080b12">
+    <meta
+      name="description"
+      content="Manim Rev is an open-source Manim Community Edition plugin for visualizing reverse engineering, program analysis, CPU behavior, and vulnerabilities."
+    >
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Manim Rev — reverse engineering, made visible">
+    <meta
+      property="og:description"
+      content="Composable Manim visuals for CFGs, traces, memory, CPU pipelines, fuzzing, symbolic execution, vulnerabilities, source analysis, and xrefs."
+    >
+    <meta property="og:url" content="https://saucetaster.github.io/manim-rev/">
+    <meta
+      property="og:image"
+      content="https://saucetaster.github.io/manim-rev/assets/core.png"
+    >
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Manim Rev — reverse engineering, made visible</title>
+    <link rel="canonical" href="https://saucetaster.github.io/manim-rev/">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell nav-shell">
+        <a class="brand" href="./" aria-label="Manim Rev home">
+          <span class="brand-mark" aria-hidden="true">MR</span>
+          <span>manim<span class="brand-accent">_rev</span></span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a aria-current="page" href="./">Overview</a>
+          <a href="examples.html">Examples</a>
+          <a href="https://github.com/SauceTaster/manim-rev/tree/main/docs">Docs</a>
+          <a class="nav-github" href="https://github.com/SauceTaster/manim-rev">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="status-line">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>v0.1.0 release candidate</span>
+            <span aria-hidden="true">·</span>
+            <span>Alpha</span>
+          </div>
+          <p class="eyebrow">Manim Community Edition plugin</p>
+          <h1 id="hero-title">Reverse engineering,<br><span>made visible.</span></h1>
+          <p class="hero-lede">
+            Build clear, deterministic animations for control flow, debugger traces,
+            memory, CPU internals, fuzzing, symbolic execution, and vulnerability
+            research—without rebuilding every visual from scratch.
+          </p>
+          <div class="button-row">
+            <a class="button button-primary" href="examples.html">Explore 39 scenes <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="https://github.com/SauceTaster/manim-rev">View on GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="scope-note">
+            Presentation toolkit, not a binary-analysis engine. You supply the evidence;
+            Manim Rev makes it legible.
+          </p>
+        </div>
+
+        <div class="hero-visual" role="img" aria-label="Illustration of source code connected to a control-flow graph and execution trace">
+          <div class="window-bar">
+            <span></span><span></span><span></span>
+            <code>recover_password.scene</code>
+          </div>
+          <div class="terminal-grid">
+            <div class="code-pane" aria-hidden="true">
+              <p><b>0x401000</b> test <em>eax, eax</em></p>
+              <p class="active"><b>0x401002</b> jne <em>0x401019</em></p>
+              <p><b>0x401004</b> call <em>check_key</em></p>
+              <p><b>0x401009</b> mov <em>byte [rbx], 1</em></p>
+            </div>
+            <div class="flow-pane" aria-hidden="true">
+              <div class="flow-node">entry <small>0x401000</small></div>
+              <span class="flow-arrow">↓</span>
+              <div class="flow-split">
+                <div class="flow-node pass">valid <small>ZF = 1</small></div>
+                <div class="flow-node fail">reject <small>ZF = 0</small></div>
+              </div>
+            </div>
+            <div class="trace-pane" aria-hidden="true">
+              <span class="trace-label">LIVE TRACE</span>
+              <div><i>01</i><code>0x401000</code><span>ZF 0</span></div>
+              <div class="current"><i>02</i><code>0x401002</code><span>ZF 1</span></div>
+              <div><i>03</i><code>0x401004</code><span>CALL</span></div>
+            </div>
+          </div>
+          <div class="visual-caption"><span>semantic address</span><code>0x401002</code><span>joins every view</span></div>
+        </div>
+      </section>
+
+      <section class="proof-strip" aria-label="Project facts">
+        <div class="shell proof-grid">
+          <div><strong>39</strong><span>example scenes</span></div>
+          <div><strong>117</strong><span>frames reviewed</span></div>
+          <div><strong>3</strong><span>CPU architectures</span></div>
+          <div><strong>MIT</strong><span>open-source license</span></div>
+        </div>
+      </section>
+
+      <section class="section shell" aria-labelledby="evidence-title">
+        <div class="section-intro split-intro">
+          <div>
+            <p class="eyebrow">One story, many views</p>
+            <h2 id="evidence-title">Keep the evidence connected.</h2>
+          </div>
+          <p>
+            A talk loses its audience when every cut introduces a new visual language.
+            Manim Rev gives source, instructions, traces, and bytes a shared semantic
+            vocabulary so the same address can carry the narrative across the screen.
+          </p>
+        </div>
+
+        <ol class="evidence-flow" aria-label="Example reverse-engineering narrative">
+          <li>
+            <span class="step-number">01</span>
+            <div><small>Locate</small><strong>Source &amp; xrefs</strong><code>parser.c:118</code></div>
+          </li>
+          <li>
+            <span class="step-number">02</span>
+            <div><small>Recover</small><strong>CFG &amp; blocks</strong><code>0x0040712a</code></div>
+          </li>
+          <li>
+            <span class="step-number">03</span>
+            <div><small>Observe</small><strong>Trace &amp; registers</strong><code>RIP → 0x0040712a</code></div>
+          </li>
+          <li>
+            <span class="step-number">04</span>
+            <div><small>Prove</small><strong>Memory &amp; bytes</strong><code>[rsp+0x18] = 0x41</code></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="section section-muted" aria-labelledby="toolkit-title">
+        <div class="shell">
+          <div class="section-intro">
+            <p class="eyebrow">Composable toolkit</p>
+            <h2 id="toolkit-title">The primitives behind a strong technical talk.</h2>
+            <p>Each component is a regular Manim mobject with deliberate animation helpers and semantic lookups.</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card cyan">
+              <span class="feature-token" aria-hidden="true">CFG</span>
+              <h3>Control flow</h3>
+              <p>Basic blocks, typed edges, traversals, loops, calls, and manually positioned dense graphs.</p>
+            </article>
+            <article class="feature-card blue">
+              <span class="feature-token" aria-hidden="true">RIP</span>
+              <h3>Debugging</h3>
+              <p>Instruction traces, breakpoints, pre/post state, repeated addresses, registers, and flags.</p>
+            </article>
+            <article class="feature-card magenta">
+              <span class="feature-token" aria-hidden="true">0x41</span>
+              <h3>Memory</h3>
+              <p>Addressable hex dumps, exact byte ranges, reads and writes, memory maps, and permissions.</p>
+            </article>
+            <article class="feature-card amber">
+              <span class="feature-token" aria-hidden="true">IF›ID</span>
+              <h3>CPU internals</h3>
+              <p>Instruction encodings, data paths, pipeline stages, stalls, forwarding, and squashes.</p>
+            </article>
+            <article class="feature-card green">
+              <span class="feature-token" aria-hidden="true">+EDGE</span>
+              <h3>Fuzzing</h3>
+              <p>Coverage growth, corpus evolution, crash discovery, reproduction, and deduplication.</p>
+            </article>
+            <article class="feature-card violet">
+              <span class="feature-token" aria-hidden="true">SAT?</span>
+              <h3>Symbolic execution</h3>
+              <p>Forking state trees, path constraints, solver outcomes, and angr-style state stashes.</p>
+            </article>
+            <article class="feature-card red">
+              <span class="feature-token" aria-hidden="true">CWE</span>
+              <h3>Vulnerabilities</h3>
+              <p>Stack overwrites, taint paths, sinks, finding cards, and evidence-driven triage.</p>
+            </article>
+            <article class="feature-card cyan">
+              <span class="feature-token" aria-hidden="true">XREF</span>
+              <h3>Source analysis</h3>
+              <p>Source listings, lowered instructions, incoming and outgoing references, and linked views.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell" aria-labelledby="demo-title">
+        <div class="section-intro split-intro">
+          <div>
+            <p class="eyebrow">Watch the components work</p>
+            <h2 id="demo-title">Six short, reproducible scenes.</h2>
+          </div>
+          <p>
+            These are low-resolution documentation renders. Every demo is backed by
+            source you can copy, adapt, and render at presentation quality.
+          </p>
+        </div>
+
+        <div class="video-grid">
+          <article class="video-card">
+            <video aria-label="Reverse-engineering showcase animation" controls muted preload="metadata" playsinline poster="assets/core.png">
+              <source src="assets/demos/reverse-engineering.mp4" type="video/mp4">
+              <a href="assets/demos/reverse-engineering.mp4">Download the reverse-engineering showcase video.</a>
+            </video>
+            <div class="video-copy"><span>Integrated</span><h3>Reverse-engineering showcase</h3><p>CFG, instructions, registers, flags, and a stack-memory write in one scene.</p></div>
+          </article>
+          <article class="video-card">
+            <video aria-label="Debugger trace to memory animation" controls muted preload="metadata" playsinline poster="assets/analysis.png">
+              <source src="assets/demos/debugger-memory.mp4" type="video/mp4">
+              <a href="assets/demos/debugger-memory.mp4">Download the debugger-memory walkthrough video.</a>
+            </video>
+            <div class="video-copy"><span>Debugging</span><h3>Breakpoint to exact byte</h3><p>Follow a recorded store from the trace instruction to the byte it changes.</p></div>
+          </article>
+          <article class="video-card">
+            <video aria-label="Pipeline branch misprediction animation" controls muted preload="metadata" playsinline poster="assets/security.png">
+              <source src="assets/demos/pipeline-mispredict.mp4" type="video/mp4">
+              <a href="assets/demos/pipeline-mispredict.mp4">Download the pipeline-mispredict video.</a>
+            </video>
+            <div class="video-copy"><span>CPU</span><h3>Branch mispredict squash</h3><p>Show the flush boundary and stop wrong-path instructions at the right cycle.</p></div>
+          </article>
+          <article class="video-card">
+            <video aria-label="Fuzzing coverage campaign animation" controls muted preload="metadata" playsinline poster="assets/security.png">
+              <source src="assets/demos/fuzzing-campaign.mp4" type="video/mp4">
+              <a href="assets/demos/fuzzing-campaign.mp4">Download the fuzzing-campaign video.</a>
+            </video>
+            <div class="video-copy"><span>Fuzzing</span><h3>Coverage growth campaign</h3><p>Turn new edges and corpus growth into a readable testing narrative.</p></div>
+          </article>
+          <article class="video-card">
+            <video aria-label="Symbolic execution fork animation" controls muted preload="metadata" playsinline poster="assets/security.png">
+              <source src="assets/demos/symbolic-fork.mp4" type="video/mp4">
+              <a href="assets/demos/symbolic-fork.mp4">Download the symbolic-fork video.</a>
+            </video>
+            <div class="video-copy"><span>Symbolic</span><h3>Fork and constrain</h3><p>Emphasize diverging states, their constraints, and solver outcomes.</p></div>
+          </article>
+          <article class="video-card">
+            <video aria-label="Stack overwrite animation" controls muted preload="metadata" playsinline poster="assets/security.png">
+              <source src="assets/demos/stack-overflow.mp4" type="video/mp4">
+              <a href="assets/demos/stack-overflow.mp4">Download the stack-overflow video.</a>
+            </video>
+            <div class="video-copy"><span>Vulnerability</span><h3>Stack overwrite</h3><p>Carry attacker-controlled bytes to the saved return address without losing context.</p></div>
+          </article>
+        </div>
+        <div class="center-action"><a class="text-link" href="examples.html">Browse every example category <span aria-hidden="true">→</span></a></div>
+      </section>
+
+      <section class="section section-muted" aria-labelledby="start-title">
+        <div class="shell quickstart-grid">
+          <div class="quickstart-copy">
+            <p class="eyebrow">Start from source today</p>
+            <h2 id="start-title">Your first CFG in five minutes.</h2>
+            <p>
+              Manim Rev requires Python &gt;=3.11 and Manim Community Edition 0.20.x;
+              CI targets Python 3.11–3.14.
+              Until the first PyPI release is published, install directly from the
+              public repository. Native Cairo and Pango prerequisites still follow
+              Manim’s platform installation guide.
+            </p>
+            <div class="release-note">
+              <strong>Release state</strong>
+              <p>
+                Version 0.1.0 is an alpha release candidate. The examples and package
+                are tested, but the public API may change between minor releases.
+              </p>
+            </div>
+          </div>
+          <div class="code-window">
+            <div class="code-title"><span>branch_scene.py</span><span>Python</span></div>
+            <div class="code-command"><span aria-hidden="true">$</span><code>python -m pip install git+https://github.com/SauceTaster/manim-rev.git</code></div>
+            <pre><code><span class="code-keyword">from</span> manim <span class="code-keyword">import</span> Create, Scene
+<span class="code-keyword">from</span> manim_rev <span class="code-keyword">import</span> (
+    BasicBlockSpec, CFGEdgeSpec,
+    ControlFlowGraph, EdgeKind, InstructionSpec,
+)
+
+<span class="code-keyword">class</span> <span class="code-name">BranchScene</span>(Scene):
+    <span class="code-keyword">def</span> <span class="code-name">construct</span>(self):
+        blocks = [
+            BasicBlockSpec(
+                <span class="code-string">"check"</span>, 0x401000,
+                [InstructionSpec(0x401000, <span class="code-string">"test"</span>, <span class="code-string">"eax, eax"</span>)],
+            ),
+            BasicBlockSpec(<span class="code-string">"ok"</span>, 0x401002, [<span class="code-string">"call handle_ok"</span>]),
+            BasicBlockSpec(<span class="code-string">"fail"</span>, 0x401009, [<span class="code-string">"call reject"</span>]),
+        ]
+        edges = [
+            CFGEdgeSpec(<span class="code-string">"check"</span>, <span class="code-string">"ok"</span>, EdgeKind.FALSE, <span class="code-string">"ZF = 0"</span>),
+            CFGEdgeSpec(<span class="code-string">"check"</span>, <span class="code-string">"fail"</span>, EdgeKind.TRUE, <span class="code-string">"ZF = 1"</span>),
+        ]
+        cfg = ControlFlowGraph(blocks, edges)
+        self.play(Create(cfg))
+        self.play(cfg.traverse([<span class="code-string">"check"</span>, <span class="code-string">"ok"</span>]))</code></pre>
+            <div class="code-command"><span aria-hidden="true">$</span><code>manim branch_scene.py BranchScene -pqh</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell" id="accessibility" aria-labelledby="quality-title">
+        <div class="quality-grid">
+          <div>
+            <p class="eyebrow">Evidence, not decoration</p>
+            <h2 id="quality-title">Built for a projector—and checked like software.</h2>
+            <p>
+              The release-candidate corpus rendered all 39 scenes with Manim CE 0.20.1.
+              Early, middle, and final frames were inspected for technical intent,
+              readability, clipping, contrast, density, and animation continuity.
+            </p>
+            <ul class="check-list">
+              <li>39 of 39 deterministic scenes rendered</li>
+              <li>117 sampled frames; no unresolved review findings</li>
+              <li>Automated tests, static typing, linting, and package checks</li>
+              <li>No required LaTeX, Graphviz, debugger, angr, or Capstone</li>
+            </ul>
+            <p class="accessibility-note">
+              <strong>About this site:</strong> semantic landmarks, visible keyboard
+              focus, descriptive image text, native video controls, and system
+              reduced-motion and increased-contrast preferences are supported. The
+              sample videos contain no audio; their adjacent descriptions state the
+              intended takeaway.
+            </p>
+            <a class="text-link" href="https://github.com/SauceTaster/manim-rev/blob/main/docs/visual-qa.md">Read the visual QA record <span aria-hidden="true">↗</span></a>
+          </div>
+          <a class="gallery-preview" href="examples.html#gallery">
+            <img src="assets/core.png" width="1329" height="882" alt="Contact sheet showing seven integrated Manim Rev example scenes" loading="lazy">
+            <span>Open the reviewed gallery <b aria-hidden="true">→</b></span>
+          </a>
+        </div>
+      </section>
+
+      <section class="cta-band" aria-labelledby="cta-title">
+        <div class="shell cta-inner">
+          <div>
+            <p class="eyebrow">Open source · MIT</p>
+            <h2 id="cta-title">Make the hard part of your talk click.</h2>
+            <p>Borrow a scene, compose a new one, or help shape the API before it stabilizes.</p>
+          </div>
+          <div class="button-row">
+            <a class="button button-primary" href="https://github.com/SauceTaster/manim-rev">Get the source <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="https://github.com/SauceTaster/manim-rev/blob/main/CONTRIBUTING.md">Contribute</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">MR</span><span>manim<span class="brand-accent">_rev</span></span></a>
+          <p>Composable visuals for reverse-engineering and security education.</p>
+        </div>
+        <nav aria-label="Project links">
+          <a href="examples.html">Examples</a>
+          <a href="https://github.com/SauceTaster/manim-rev/tree/main/docs">Documentation</a>
+          <a href="https://github.com/SauceTaster/manim-rev/issues">Issues</a>
+          <a href="https://github.com/SauceTaster/manim-rev/blob/main/LICENSE">MIT license</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

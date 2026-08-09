@@ -1,0 +1,17 @@
+name: Private conduct contact
+description: Ask a maintainer to arrange a confidential channel for a conduct report
+title: "[Private conduct contact requested]"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do **not** include incident details, names, screenshots, contact details, or other private information in this public issue. This form only alerts maintainers that confidential follow-up is needed.
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have read the Code of Conduct and request confidential follow-up from a maintainer.
+          required: true
+        - label: I have not included incident details or private information in this issue.
+          required: true

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If Manim Rev supports your published work or teaching material, please cite the software."
+title: "Manim Rev"
+type: software
+authors:
+  - name: "Manim Rev contributors"
+abstract: >-
+  A Manim Community Edition plugin for creating deterministic,
+  presentation-ready visual explanations of reverse engineering, program
+  analysis, processor behavior, fuzzing, and software vulnerabilities.
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/SauceTaster/manim-rev"
+url: "https://saucetaster.github.io/manim-rev/"
+keywords:
+  - Manim
+  - reverse engineering
+  - binary analysis
+  - security visualization
+  - program analysis
