@@ -79,10 +79,11 @@ class ReverseEngineeringShowcase(RevScene):
                 CFGEdgeSpec("check", "reject", EdgeKind.FALSE, "ZF = 1"),
             ],
             block_width=3.0,
+            compact_addresses=True,
             horizontal_gap=0.45,
             vertical_gap=0.55,
         )
-        cfg.scale(0.74).to_edge(LEFT, buff=0.35).shift(DOWN * 0.3)
+        cfg.next_to(heading, DOWN, buff=0.42)
 
         registers = RegisterBank(
             {"rip": 0x401000, "rax": 0x41, "rbx": 0x7FFFFFFFE128},
@@ -97,10 +98,16 @@ class ReverseEngineeringShowcase(RevScene):
             title="stack memory",
         )
         side = VGroup(registers, flags, memory).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        side.scale_to_fit_width(6.1).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.22)
+        side.scale_to_fit_width(5.8).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.22)
 
-        self.play(FadeIn(heading), FadeIn(cfg), FadeIn(side), run_time=0.7)
-        self.play(cfg.traverse(["check", "copy"]), flags.animate_set("ZF", False))
+        self.play(FadeIn(heading), FadeIn(cfg), run_time=0.6)
+        self.play(cfg.traverse(["check", "copy"]))
+        self.play(
+            cfg.animate.scale(0.82).to_edge(LEFT, buff=0.4).shift(DOWN * 0.3),
+            FadeIn(side, shift=LEFT * 0.12),
+            run_time=0.65,
+        )
+        self.play(flags.animate_set("ZF", False))
         self.play(registers.animate_set("rip", 0x401010))
         self.play(memory.animate_write(0x7FFFFFFFE128, b"A", color=self.theme.danger))
         self.play(memory.highlight(0x7FFFFFFFE128, color=self.theme.danger))

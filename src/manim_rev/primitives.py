@@ -7,6 +7,7 @@ from manim import (
     LEFT,
     RIGHT,
     Dot,
+    Rectangle,
     RoundedRectangle,
     Text,
     VGroup,
@@ -64,28 +65,31 @@ class Panel(VGroup):
         title: str | None = None,
         theme: RevTheme = DEFAULT_THEME,
         fill_color: str | None = None,
-        corner_radius: float = 0.14,
+        corner_radius: float = 0.08,
         title_font_size: float = 20,
         **kwargs: object,
     ) -> None:
         super().__init__(**kwargs)
         self.theme = theme
-        self.background = RoundedRectangle(
-            width=width,
-            height=height,
-            corner_radius=corner_radius,
-            stroke_color=theme.border,
-            stroke_width=1.5,
-            fill_color=fill_color or theme.panel,
-            fill_opacity=1,
-        )
+        shape = Rectangle if corner_radius <= 0 else RoundedRectangle
+        shape_kwargs: dict[str, object] = {
+            "width": width,
+            "height": height,
+            "stroke_color": theme.border,
+            "stroke_width": 1.5,
+            "fill_color": fill_color or theme.panel,
+            "fill_opacity": 1,
+        }
+        if shape is RoundedRectangle:
+            shape_kwargs["corner_radius"] = corner_radius
+        self.background = shape(**shape_kwargs)
         self.add(self.background)
         self.title_mobject: Text | None = None
         if title:
             self.title_mobject = label_text(
-                title.upper(),
+                title,
                 font_size=title_font_size,
-                color=theme.muted,
+                color=theme.text,
                 theme=theme,
                 weight="BOLD",
             )

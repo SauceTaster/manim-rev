@@ -188,10 +188,14 @@ technical accuracy, intent, legibility, clipping, contrast, and continuity.
 
 ## Design principles
 
+- **Manim-native:** flat diagrams, restrained structure, and familiar Manim
+  blue/green/yellow/red accents instead of terminal or dashboard chrome.
 - **Presentation-first:** high contrast and legible at talk scale.
-- **Deterministic:** internal layouts do not require Graphviz or random seeds.
-- **Composable:** helpers return ordinary Manim animations and do not call
-  `Scene.play()` for you.
+- **Deterministic:** topology and layout algorithms do not require Graphviz or
+  random seeds; final text metrics still depend on the fonts resolved by the
+  render environment.
+- **Composable:** component animation helpers return ordinary Manim animations
+  and do not call `Scene.play()` for you.
 - **Addressable:** views expose semantic references instead of fragile
   submobject indexes.
 - **Portable:** no required LaTeX, Graphviz, angr, Capstone, or live debugger.
@@ -230,8 +234,8 @@ best-effort while the project is alpha.
 
 Do not disclose suspected vulnerabilities in a public issue. Follow
 [`SECURITY.md`](https://github.com/SauceTaster/manim-rev/blob/main/SECURITY.md)
-and use GitHub private vulnerability reporting when it is enabled. Citation
-metadata for papers and teaching material is in
+and use [GitHub private vulnerability reporting](https://github.com/SauceTaster/manim-rev/security/advisories/new).
+Citation metadata for papers and teaching material is in
 [`CITATION.cff`](https://github.com/SauceTaster/manim-rev/blob/main/CITATION.cff).
 
 ## License

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#080b12">
+    <meta name="theme-color" content="#000000">
     <meta
       name="description"
       content="Explore 39 reviewed Manim Rev scenes for reverse engineering, debugging, CPU behavior, fuzzing, symbolic execution, and vulnerability research."
@@ -28,8 +28,8 @@
           <span>manim<span class="brand-accent">_rev</span></span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="./">Overview</a>
-          <a aria-current="page" href="examples.html">Examples</a>
+          <a class="nav-overview" href="./">Overview</a>
+          <a class="nav-examples" aria-current="page" href="examples.html">Examples</a>
           <a href="https://github.com/SauceTaster/manim-rev/tree/main/docs">Docs</a>
           <a class="nav-github" href="https://github.com/SauceTaster/manim-rev">GitHub <span aria-hidden="true">↗</span></a>
         </nav>
@@ -193,7 +193,7 @@
             <p class="small-print">Quality checks are review prompts, not substitutes for technical and editorial judgment.</p>
           </div>
           <div class="code-window compact-code">
-            <div class="code-title"><span>Terminal</span><span>repository root</span></div>
+            <div class="code-title"><span>Render commands</span><span>repository root</span></div>
             <pre><code><span class="code-comment"># Discover the complete inventory</span>
 uv run python scripts/render_examples.py --list
 

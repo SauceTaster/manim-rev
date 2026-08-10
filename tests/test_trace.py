@@ -182,7 +182,7 @@ def test_trace_window_retains_original_row_indexes_and_filters_breakpoints() -> 
     assert tuple(row.index for row in trace.rows) == (1, 2)
     assert trace.breakpoints == frozenset({events[2].address})
     assert trace.title_mobject is not None
-    assert trace.title_mobject.text == "RECORDING·EVENTS1-2OF3"
+    assert trace.title_mobject.text == "recording·events1-2of3"
     assert trace.event(0) is events[1]
 
     with pytest.raises(ValueError, match="non-negative"):

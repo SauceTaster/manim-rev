@@ -36,15 +36,22 @@ tree layouts are internal and deterministic; Graphviz is not required.
 helpers. Every component accepts a `RevTheme`, so a scene can use a custom
 palette without changing global Manim state.
 
+The default palette stays close to Manim Community Edition's familiar visual
+language: black, white, and gray for structure; blue (`#58C4DD`) for active
+information; green (`#83C167`) for success and true branches; yellow
+(`#F7D96F`) for warnings and loops; and red (`#FC6255`) for false branches,
+failures, or dangerous state. Branch labels keep the meaning explicit without
+relying on color alone.
+
 ```python
 from manim_rev import DEFAULT_THEME, RevScene
 
 
 class BrandedTalk(RevScene):
     theme = DEFAULT_THEME.derive(
-        background="#101014",
-        info="#00D9C0",
-        danger="#FF3B6B",
+        background="#101010",
+        info="#29ABCA",
+        warning="#F0AC5F",
     )
 
     def construct(self):
@@ -52,7 +59,9 @@ class BrandedTalk(RevScene):
         self.wait()
 ```
 
-`light_theme()` returns a light projector-friendly alternative.
+`light_theme()` returns a light projector-friendly alternative. The retained
+0.1.0 visual audit covers the default dark theme; review a light-theme scene on
+the intended projector before using it in a talk.
 
 ## CFGs and basic blocks
 
@@ -105,6 +114,21 @@ avoid fragile indexes into `submobjects`. Pass `positions={key: (x, y)}` (or
 three-dimensional `(x, y, z)` coordinates) when matching a diagram from
 another tool. A partial mapping overrides only the named blocks; omitted blocks
 retain their repeatable built-in layered positions.
+
+The built-in layout ranks blocks by their longest forward path, so a merge is
+placed below all of its incoming branches. Explicit loop and detected back edges
+are excluded from ranking and routed outside the graph bounds. Ordinary edges
+use distributed block ports; true and false labels remain explicit rather than
+relying on color alone.
+
+Instruction rows preserve full integer and symbolic addresses by default. For a
+deliberately compact talk diagram, pass `compact_addresses=True` to
+`BasicBlock` or `ControlFlowGraph`; integers then use an explicit ellipsis such
+as `0x…ABCD`, while symbolic addresses remain intact. Blocks narrower than the
+supported column minimum raise an error instead of silently overflowing. The
+minimum basic-block width is `2.25`, or `3.10` when `show_bytes=True`; automatic
+CFG layout gaps must be at least `0.25` so edge ports and labels have real
+clearance.
 
 ## Disassembly, registers, flags, and CPU details
 
@@ -292,8 +316,13 @@ content.
 - `cfg_from_ghidra_json()` consumes a small exported JSON shape.
 - `trace_events_from_records()` accepts JSON/GDB/LLDB-style dictionaries.
 
-Install `manim-rev[analysis]` for the Capstone adapter or `manim-rev[angr]` for
-angr itself. Live analysis should happen before rendering.
+For a source checkout today, install the relevant extra with
+`python -m pip install ".[analysis]"` for Capstone or
+`python -m pip install ".[angr]"` for angr. After a release is visible on PyPI,
+the corresponding distribution commands will be
+`python -m pip install "manim-rev[analysis]"` and
+`python -m pip install "manim-rev[angr]"`. Live analysis should happen before
+rendering.
 
 ## Rendering and testing
 

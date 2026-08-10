@@ -26,7 +26,7 @@ from manim_rev import (
     RevScene,
     TraceEvent,
     TracePhase,
-    mono_text,
+    label_text,
 )
 
 
@@ -55,7 +55,7 @@ def _under_title(
 
 
 def _footer(scene: RevScene, text: str):  # type: ignore[no-untyped-def]
-    note = mono_text(text, font_size=16, color=scene.theme.muted, theme=scene.theme)
+    note = label_text(text, font_size=16, color=scene.theme.muted, theme=scene.theme)
     if note.width > 12.7:
         note.scale_to_fit_width(12.7)
     note.to_edge(DOWN, buff=0.13)
@@ -68,7 +68,13 @@ def _block(
     *,
     width: float = 2.65,
 ) -> BasicBlock:
-    return BasicBlock(spec, width=width, row_height=0.27, theme=scene.theme)
+    return BasicBlock(
+        spec,
+        width=width,
+        row_height=0.32,
+        compact_addresses=True,
+        theme=scene.theme,
+    )
 
 
 class LoopAndCallRecovery(RevScene):
@@ -121,7 +127,7 @@ class LoopAndCallRecovery(RevScene):
                     InstructionSpec(0x401015, "inc", "ecx"),
                     InstructionSpec(0x401017, "jmp", "loop header"),
                 ),
-                label="increment + repeat",
+                label="latch",
             ),
             BasicBlockSpec(
                 "done",
@@ -134,12 +140,20 @@ class LoopAndCallRecovery(RevScene):
             tuple(_block(spec, self) for spec in specs),
             (
                 CFGEdgeSpec("entry", "header"),
-                CFGEdgeSpec("header", "body", EdgeKind.FALSE, "ecx < 4"),
-                CFGEdgeSpec("header", "done", EdgeKind.TRUE, "ecx >= 4"),
-                CFGEdgeSpec("body", "helper", EdgeKind.CALL, "CALL"),
-                CFGEdgeSpec("helper", "latch", EdgeKind.RETURN, "RET"),
-                CFGEdgeSpec("latch", "header", EdgeKind.LOOP, "back edge"),
+                CFGEdgeSpec("header", "body", EdgeKind.FALSE, "continue"),
+                CFGEdgeSpec("header", "done", EdgeKind.TRUE, "exit"),
+                CFGEdgeSpec("body", "helper", EdgeKind.CALL, "call"),
+                CFGEdgeSpec("helper", "latch", EdgeKind.RETURN, "return"),
+                CFGEdgeSpec("latch", "header", EdgeKind.LOOP, "repeat"),
             ),
+            positions={
+                "entry": (-2.0, 2.55),
+                "header": (-2.0, 1.05),
+                "body": (-2.0, -0.7),
+                "helper": (1.25, -0.7),
+                "latch": (-2.0, -2.35),
+                "done": (2.1, 1.05),
+            },
             horizontal_gap=0.4,
             vertical_gap=0.3,
             theme=self.theme,
@@ -172,7 +186,7 @@ class DenseDispatchRecovery(RevScene):
                     f"case{index}",
                     0x402020 + index * 0x10,
                     (InstructionSpec(0x402020 + index * 0x10, "mov", f"eax, {value}"),),
-                    label=f"case {index}: mode {value}",
+                    label=f"case {index}",
                 )
                 for index, value in enumerate((7, 11, 19, 23))
             ),
@@ -180,7 +194,7 @@ class DenseDispatchRecovery(RevScene):
                 "default",
                 0x402060,
                 (InstructionSpec(0x402060, "mov", "eax, 29"),),
-                label="default: mode 29",
+                label="default",
             ),
         )
         case_keys = tuple(spec.key for spec in case_specs)
@@ -198,35 +212,34 @@ class DenseDispatchRecovery(RevScene):
             BasicBlockSpec(
                 "dispatch",
                 0x402005,
-                (InstructionSpec(0x402005, "jmp", "[table + rdi*8]"),),
-                label="jump-table dispatch",
+                (InstructionSpec(0x402005, "jmp", "[table+rdi*8]"),),
+                label="dispatch",
             ),
             *case_specs,
             BasicBlockSpec(
                 "join",
                 0x402080,
                 (InstructionSpec(0x402080, "ret"),),
-                label="shared epilogue",
+                label="epilogue",
             ),
         )
         graph = ControlFlowGraph(
-            tuple(_block(spec, self, width=2.05) for spec in specs),
+            tuple(
+                _block(
+                    spec,
+                    self,
+                    width=2.8 if spec.key in {"guard", "dispatch"} else 2.25,
+                )
+                for spec in specs
+            ),
             (
                 CFGEdgeSpec("guard", "default", EdgeKind.TRUE, "> 3"),
                 CFGEdgeSpec("guard", "dispatch", EdgeKind.FALSE, "0..3"),
-                *(
-                    CFGEdgeSpec(
-                        "dispatch",
-                        key,
-                        EdgeKind.UNCONDITIONAL,
-                        str(index),
-                    )
-                    for index, key in enumerate(table_case_keys)
-                ),
+                *(CFGEdgeSpec("dispatch", key, EdgeKind.UNCONDITIONAL) for key in table_case_keys),
                 *(CFGEdgeSpec(key, "join", EdgeKind.UNCONDITIONAL) for key in case_keys),
             ),
-            block_width=2.05,
-            horizontal_gap=0.18,
+            block_width=2.25,
+            horizontal_gap=0.25,
             vertical_gap=0.58,
             theme=self.theme,
         )
@@ -270,20 +283,20 @@ class TraceBackedBranchRecovery(RevScene):
                 ),
                 _block(
                     BasicBlockSpec(
-                        "accept",
-                        accepted,
-                        (InstructionSpec(accepted, "call", "parse_record"),),
-                        label="known tag",
+                        "reject",
+                        0x403030,
+                        (InstructionSpec(0x403030, "xor", "eax, eax"),),
+                        label="unknown tag",
                     ),
                     self,
                     width=2.75,
                 ),
                 _block(
                     BasicBlockSpec(
-                        "reject",
-                        0x403030,
-                        (InstructionSpec(0x403030, "xor", "eax, eax"),),
-                        label="unknown tag",
+                        "accept",
+                        accepted,
+                        (InstructionSpec(accepted, "call", "parse_record"),),
+                        label="known tag",
                     ),
                     self,
                     width=2.75,
