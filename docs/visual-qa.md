@@ -10,8 +10,12 @@ scene-specific composition.
 | Item | Result |
 | --- | --- |
 | Audit date | 2026-08-09 |
+| Source revision | [`d65ea1e`](https://github.com/SauceTaster/manim-rev/commit/d65ea1e362d7594ad45afbfefc64ede6ab151062) |
 | Manim | Community Edition 0.20.1, Cairo renderer |
 | Render profile | 854×480, 15 fps (`-ql`) |
+| Audit host | macOS 26.4.1 (25E253), arm64 |
+| Resolved font aliases | Hiragino Sans W4 (`sans-serif`); Andale Mono Regular (`monospace`) |
+| Theme scope | Default dark theme; the light theme was not included |
 | Corpus | 39 of 39 scenes rendered |
 | Sampled frames | 117: early, middle, and final for every scene |
 | Automated review prompts | 0 |
