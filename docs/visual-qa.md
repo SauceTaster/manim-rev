@@ -1,8 +1,9 @@
 # Visual QA record
 
-This page records the release-candidate visual audit for Manim Rev 0.1.0. It
-is evidence for the bundled examples, not a promise that arbitrary user data
-will fit without scene-specific composition.
+This page records the release-candidate visual audit for Manim Rev 0.1.0 after
+the flat, Manim-aligned visual redesign. It is evidence for the bundled
+examples, not a promise that arbitrary user data will fit without
+scene-specific composition.
 
 ## Result
 
@@ -14,7 +15,7 @@ will fit without scene-specific composition.
 | Corpus | 39 of 39 scenes rendered |
 | Sampled frames | 117: early, middle, and final for every scene |
 | Automated review prompts | 0 |
-| Human review | No unresolved content, clipping, contrast, density, or continuity findings |
+| Human review | No unresolved content, clipping, contrast, density, routing, or continuity findings |
 
 The human pass checked that every scene's visible evidence supports its class
 docstring, that technical labels remain readable at the QA resolution, that
@@ -71,8 +72,19 @@ human inspection, so both checks are required for this record.
 
 The render-and-review loop produced concrete design and example corrections:
 
-- dense dispatch and loop examples now preserve branch polarity and make the
-  guard/dispatch distinction explicit;
+- basic blocks now use a fitted label/address header, shared instruction
+  columns, one divider, neutral outlines, and no alternating row cards;
+- CFG layers use the longest forward path after excluding loop and detected
+  back edges, keeping dense merge blocks below all of their predecessors;
+- distributed block ports separate fan-out and fan-in arrows, while long and
+  back edges use outside lanes with backed, direction-aware labels;
+- traversal and semantic focus use passing outlines instead of recoloring an
+  opaque block and making its instructions unreadable;
+- the loop, dense-dispatch, trace-backed, and integrated CFG examples were
+  recomposed and rechecked at 854×480;
+- the package themes, panel titles, retained contact sheets, demo videos, and
+  GitHub Pages design now use flat black/white/gray structure with Manim's
+  familiar blue, green, yellow, and red accents rather than terminal chrome;
 - branch-misprediction timelines stop squashed instructions at the actual
   flush cycle instead of showing impossible future stages;
 - trace views support readable windows, duplicate instruction addresses,
@@ -81,8 +93,8 @@ The render-and-review loop produced concrete design and example corrections:
 - cards reserve room for badges, taint arrows have deliberate routes, compact
   memory maps adapt to their row count, and odd workbench layouts center their
   trailing pane; and
-- manual CFG positions and curved semantic links give talk authors escape
-  hatches for unusually dense evidence.
+- manual CFG positions and semantic links give talk authors escape hatches for
+  unusually dense evidence.
 
 For the scene inventory and individual render commands, see the
 [example catalog](examples.md).

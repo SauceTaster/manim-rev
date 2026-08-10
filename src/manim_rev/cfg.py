@@ -5,20 +5,24 @@ from __future__ import annotations
 from collections import defaultdict, deque
 from collections.abc import Mapping, Sequence
 from itertools import pairwise
-from math import isfinite
+from math import atan2, hypot, isfinite, pi
+from typing import Any
 
 from manim import (
     DOWN,
     LEFT,
-    PI,
     RIGHT,
     UP,
     Animation,
     AnimationGroup,
     Arrow,
-    Indicate,
+    ArrowTriangleFilledTip,
+    BackgroundRectangle,
+    Circumscribe,
+    CubicBezier,
+    Line,
     Mobject,
-    RoundedRectangle,
+    Rectangle,
     ShowPassingFlash,
     Succession,
     VGroup,
@@ -32,7 +36,7 @@ from .models import (
     InstructionSpec,
     format_address,
 )
-from .primitives import Panel, mono_text
+from .primitives import Panel, label_text, mono_text
 from .refs import AddressRangeRef, AddressRef, BlockRef, VisualRef
 from .theme import DEFAULT_THEME, RevTheme
 
@@ -45,8 +49,27 @@ def _fit_width(mobject: Mobject, width: float) -> Mobject:
     return mobject
 
 
+_MIN_BLOCK_WIDTH = 2.25
+_MIN_BLOCK_WIDTH_WITH_BYTES = 3.10
+_MIN_CFG_GAP = 0.25
+
+
+def _overlap_area(first: Mobject, second: Mobject, *, first_buff: float = 0.0) -> float:
+    """Return axis-aligned overlap area, expanding ``first`` by ``first_buff``."""
+
+    width = min(first.get_right()[0] + first_buff, second.get_right()[0]) - max(
+        first.get_left()[0] - first_buff,
+        second.get_left()[0],
+    )
+    height = min(first.get_top()[1] + first_buff, second.get_top()[1]) - max(
+        first.get_bottom()[1] - first_buff,
+        second.get_bottom()[1],
+    )
+    return max(0.0, float(width)) * max(0.0, float(height))
+
+
 class BasicBlock(Panel):
-    """A compact basic-block card with addressable instruction rows."""
+    """A clean, addressable basic block for mathematical-style CFG diagrams."""
 
     def __init__(
         self,
@@ -56,10 +79,13 @@ class BasicBlock(Panel):
         row_height: float = 0.34,
         show_bytes: bool = False,
         address_width: int = 8,
+        compact_addresses: bool = False,
         theme: RevTheme = DEFAULT_THEME,
     ) -> None:
-        if width <= 1:
-            raise ValueError("basic-block width must be greater than 1")
+        minimum_width = _MIN_BLOCK_WIDTH_WITH_BYTES if show_bytes else _MIN_BLOCK_WIDTH
+        if width < minimum_width:
+            mode = " when showing bytes" if show_bytes else ""
+            raise ValueError(f"basic-block width must be at least {minimum_width:.2f}{mode}")
         if row_height <= 0:
             raise ValueError("row height must be positive")
 
@@ -67,16 +93,60 @@ class BasicBlock(Panel):
         self.key = block.key
         self.address_width = address_width
         self.show_bytes = show_bytes
+        self.compact_addresses = compact_addresses
         instruction_count = max(1, len(block.instructions))
-        height = 0.7 + instruction_count * (row_height + 0.035)
-        title = block.label or f"{block.key}  {format_address(block.address, width=address_width)}"
+        row_gap = 0.025
+        header_height = 0.46
+        height = 0.22 + header_height + instruction_count * row_height
+        height += max(0, instruction_count - 1) * row_gap
         super().__init__(
             width=width,
             height=height,
-            title=title,
+            title=None,
             theme=theme,
-            title_font_size=16,
+            fill_color=theme.background,
+            corner_radius=0,
         )
+        self.background.set_stroke(theme.border, width=1.7)
+
+        display_label = block.label or block.key
+        self.block_label = label_text(
+            display_label,
+            font_size=17,
+            color=theme.text,
+            theme=theme,
+            weight="BOLD",
+        )
+        self.block_address = mono_text(
+            format_address(block.address, width=address_width),
+            font_size=11,
+            color=theme.muted,
+            theme=theme,
+        )
+        address_room = min(max(0.64, width * 0.36), width - 0.82)
+        _fit_width(self.block_address, address_room)
+        label_room = max(0.3, width - self.block_address.width - 0.48)
+        _fit_width(self.block_label, label_room)
+        self.block_label.move_to(
+            self.background.get_top() + DOWN * 0.23 + RIGHT * 0.14,
+            aligned_edge=LEFT,
+        )
+        self.block_label.align_to(self.background, LEFT).shift(RIGHT * 0.14)
+        self.block_address.move_to(
+            self.background.get_top() + DOWN * 0.23 + LEFT * 0.14,
+            aligned_edge=RIGHT,
+        )
+        self.block_address.align_to(self.background, RIGHT).shift(LEFT * 0.14)
+        self.title_mobject = self.block_label
+        self.header = VGroup(self.block_label, self.block_address)
+        self.divider = Line(
+            self.background.get_left() + RIGHT * 0.12,
+            self.background.get_right() + LEFT * 0.12,
+            color=theme.border,
+            stroke_width=0.8,
+        )
+        self.divider.set_y(self.background.get_top()[1] - header_height)
+        self.add(self.header, self.divider)
 
         self.rows = VGroup()
         self.instruction_rows: dict[Address, VGroup] = {}
@@ -93,68 +163,84 @@ class BasicBlock(Panel):
                     self.instruction_rows[instruction.address] = row
                     self._row_specs[instruction.address] = instruction
         else:
-            empty = mono_text("<empty>", font_size=15, color=theme.muted, theme=theme)
+            empty = self._make_row("empty", 0, width - 0.24, row_height)
             self.rows.add(empty)
 
-        self.rows.arrange(DOWN, buff=0.035, aligned_edge=LEFT)
-        self.rows.move_to(self.background).shift(DOWN * 0.16)
+        self.rows.arrange(DOWN, buff=row_gap, aligned_edge=LEFT)
+        self.rows.next_to(self.divider, DOWN, buff=0.07)
         self.add(self.rows)
 
     def _make_row(
         self,
         instruction: InstructionSpec | str,
-        index: int,
+        _index: int,
         width: float,
         height: float,
     ) -> VGroup:
-        background = RoundedRectangle(
+        background = Rectangle(
             width=width,
             height=height,
-            corner_radius=0.045,
             stroke_width=0,
-            fill_color=self.theme.panel_alt,
-            fill_opacity=0.48 if index % 2 == 0 else 0.23,
+            fill_color=self.theme.background,
+            fill_opacity=0,
         )
         if isinstance(instruction, str):
-            text = mono_text(instruction, font_size=16, color=self.theme.text, theme=self.theme)
-            _fit_width(text, width - 0.2)
-            text.align_to(background, LEFT).shift(RIGHT * 0.1)
+            text = mono_text(instruction, font_size=15, color=self.theme.text, theme=self.theme)
+            _fit_width(text, width - 0.24)
+            text.align_to(background, LEFT).shift(RIGHT * 0.12)
             return VGroup(background, text)
 
+        compact = width < 2.6
+        formatted_address = format_address(instruction.address, width=self.address_width)
+        if self.compact_addresses and isinstance(instruction.address, int):
+            formatted_address = f"0x…{formatted_address[-4:]}"
         address = mono_text(
-            format_address(instruction.address, width=self.address_width),
-            font_size=13,
-            color=self.theme.address,
+            formatted_address,
+            font_size=12 if compact else 13,
+            color=self.theme.muted,
             theme=self.theme,
         )
         mnemonic = mono_text(
             instruction.mnemonic,
-            font_size=16,
+            font_size=16 if compact else 17,
             color=self.theme.opcode,
             theme=self.theme,
             weight="BOLD",
         )
         operands = mono_text(
             instruction.operands,
-            font_size=15,
-            color=self.theme.register,
+            font_size=14 if compact else 16,
+            color=self.theme.text,
             theme=self.theme,
         )
         parts = VGroup(address)
+        cursor = 0.12
+        address_width = min(1.12, max(0.68, width * 0.28))
+        _fit_width(address, address_width - 0.08)
+        address.move_to(background.get_left() + RIGHT * cursor, aligned_edge=LEFT)
+        cursor += address_width
         if self.show_bytes:
             raw_bytes = mono_text(
                 instruction.bytes_text or "--",
-                font_size=11,
+                font_size=10 if compact else 11,
                 color=self.theme.muted,
                 theme=self.theme,
             )
             parts.add(raw_bytes)
+            bytes_width = min(1.34, max(0.72, width * 0.28))
+            _fit_width(raw_bytes, bytes_width - 0.08)
+            raw_bytes.move_to(background.get_left() + RIGHT * cursor, aligned_edge=LEFT)
+            cursor += bytes_width
         parts.add(mnemonic)
+        mnemonic_width = min(0.9, max(0.52, width * 0.2))
+        _fit_width(mnemonic, mnemonic_width - 0.06)
+        mnemonic.move_to(background.get_left() + RIGHT * cursor, aligned_edge=LEFT)
+        cursor += mnemonic_width
         if instruction.operands:
             parts.add(operands)
-        parts.arrange(RIGHT, buff=0.13)
-        _fit_width(parts, width - 0.2)
-        parts.align_to(background, LEFT).shift(RIGHT * 0.1)
+            operand_width = max(0.18, width - cursor - 0.12)
+            _fit_width(operands, operand_width)
+            operands.move_to(background.get_left() + RIGHT * cursor, aligned_edge=LEFT)
         return VGroup(background, parts)
 
     def row(self, index: int) -> Mobject:
@@ -214,10 +300,10 @@ class BasicBlock(Panel):
             raise LookupError(f"block {self.key!r} cannot resolve {ref!r}")
         return AnimationGroup(
             *(
-                Indicate(
-                    target,
+                Circumscribe(
+                    target.background if isinstance(target, BasicBlock) else target,
                     color=color or self.theme.warning,
-                    scale_factor=scale_factor,
+                    buff=max(0.04, (scale_factor - 1) * 0.7),
                 )
                 for target in targets
             )
@@ -230,45 +316,133 @@ class _CFGEdge(VGroup):
     def __init__(
         self,
         spec: CFGEdgeSpec,
-        source: BasicBlock,
-        target: BasicBlock,
         *,
+        start: Any,
+        end: Any,
         color: str,
-        path_arc: float = 0,
+        route_lane_x: float | None = None,
+        label_side: float = 1,
+        obstacles: Sequence[Mobject] = (),
         theme: RevTheme = DEFAULT_THEME,
     ) -> None:
         super().__init__()
         self.spec = spec
-        if source is target:
-            start = source.get_right() + UP * 0.11
-            end = source.get_right() + DOWN * 0.11
-            path_arc = -1.55 * PI
+        if route_lane_x is None:
+            self.arrow = Arrow(
+                start,
+                end,
+                buff=0,
+                color=color,
+                stroke_width=2,
+                max_tip_length_to_length_ratio=0.11,
+                max_stroke_width_to_length_ratio=2,
+            )
+            self.arrow_tip = None
         else:
-            start = source
-            end = target
-        self.arrow = Arrow(
-            start,
-            end,
-            buff=0.08,
-            path_arc=path_arc,
-            color=color,
-            stroke_width=2.1,
-            max_tip_length_to_length_ratio=0.16,
-        )
+            first_control = start.copy()
+            first_control[0] = route_lane_x
+            second_control = end.copy()
+            second_control[0] = route_lane_x
+            self.arrow = CubicBezier(
+                start,
+                first_control,
+                second_control,
+                end,
+                color=color,
+                stroke_width=2,
+            )
+            tangent = end - self.arrow.point_from_proportion(0.98)
+            angle = float(atan2(tangent[1], tangent[0]))
+            self.arrow_tip = ArrowTriangleFilledTip(
+                length=0.13,
+                width=0.13,
+                color=color,
+                stroke_width=0,
+            )
+            self.arrow_tip.rotate(angle - pi)
+            self.arrow_tip.shift(end - self.arrow_tip.tip_point)
         self.add(self.arrow)
+        if self.arrow_tip is not None:
+            self.add(self.arrow_tip)
         self.label = None
+        self.label_background = None
         label_value = spec.label or _default_edge_label(spec.kind)
         if label_value:
-            self.label = mono_text(label_value, font_size=12, color=color, theme=theme)
-            self.label.move_to(self.arrow.point_from_proportion(0.5) + RIGHT * 0.08)
-            self.add(self.label)
+            self.label = label_text(label_value, font_size=12, color=color, theme=theme)
+            proportions = (0.5, 0.42, 0.58, 0.34, 0.66, 0.26, 0.74)
+            sides = (label_side, -label_side)
+            offsets: tuple[float, ...]
+            if obstacles:
+                obstacle_left = min(obstacle.get_left()[0] for obstacle in obstacles)
+                obstacle_right = max(obstacle.get_right()[0] for obstacle in obstacles)
+                obstacle_bottom = min(obstacle.get_bottom()[1] for obstacle in obstacles)
+                obstacle_top = max(obstacle.get_top()[1] for obstacle in obstacles)
+                escape_offset = (
+                    hypot(
+                        float(obstacle_right - obstacle_left),
+                        float(obstacle_top - obstacle_bottom),
+                    )
+                    + self.label.width
+                    + self.label.height
+                    + 0.5
+                )
+                offsets = (0.18, 0.0, 0.28, 0.4, 0.54, 0.72, 0.95, 1.25, escape_offset)
+            else:
+                offsets = (0.18,)
+            best_position = self.arrow.point_from_proportion(0.5)
+            best_overlap = float("inf")
+            placed = False
+            for proportion in proportions:
+                point = self.arrow.point_from_proportion(proportion)
+                before = self.arrow.point_from_proportion(max(0, proportion - 0.025))
+                after = self.arrow.point_from_proportion(min(1, proportion + 0.025))
+                tangent = after - before
+                normal = RIGHT.copy()
+                normal[0] = -tangent[1]
+                normal[1] = tangent[0]
+                normal[2] = 0
+                length = float((normal[0] ** 2 + normal[1] ** 2) ** 0.5)
+                if length:
+                    normal /= length
+                else:
+                    normal = RIGHT.copy()
+                for side in sides:
+                    for offset in offsets:
+                        position = point + normal * offset * side
+                        self.label.move_to(position)
+                        overlap = sum(
+                            _overlap_area(self.label, obstacle, first_buff=0.06)
+                            for obstacle in obstacles
+                        )
+                        if overlap < best_overlap:
+                            best_overlap = overlap
+                            best_position = position.copy()
+                        if overlap <= 1e-9:
+                            placed = True
+                            break
+                    if placed:
+                        break
+                if placed:
+                    break
+            if best_overlap > 1e-9:
+                raise RuntimeError("could not place CFG edge label outside diagram content")
+            self.label.move_to(best_position)
+            self.label_background = BackgroundRectangle(
+                self.label,
+                color=theme.background,
+                fill_color=theme.background,
+                fill_opacity=0.94,
+                stroke_width=0,
+                buff=0.045,
+            )
+            self.add(self.label_background, self.label)
 
 
 def _default_edge_label(kind: EdgeKind) -> str:
     if kind is EdgeKind.TRUE:
-        return "T"
+        return "true"
     if kind is EdgeKind.FALSE:
-        return "F"
+        return "false"
     return ""
 
 
@@ -280,17 +454,18 @@ def _edge_color(kind: EdgeKind, theme: RevTheme) -> str:
         EdgeKind.CALL: theme.call,
         EdgeKind.RETURN: theme.call,
         EdgeKind.LOOP: theme.loop,
-        EdgeKind.UNCONDITIONAL: theme.info,
+        EdgeKind.UNCONDITIONAL: theme.fallthrough,
     }[kind]
 
 
 class ControlFlowGraph(VGroup):
     """A deterministic top-to-bottom control-flow graph.
 
-    The layout uses breadth-first layers rooted at ``entry``. Back edges never
-    alter an already assigned layer, making loop-heavy graphs stable without
-    Graphviz or a random layout engine. Optional two- or three-dimensional
-    ``positions`` override named block centers after that layout is computed.
+    The layout uses deterministic longest-path layers over the forward-edge
+    DAG. Loop and DFS back edges are routed outside the block bounds, keeping
+    merge nodes below all of their forward predecessors. Optional two- or
+    three-dimensional ``positions`` override named block centers before edges
+    are routed.
     """
 
     def __init__(
@@ -301,6 +476,7 @@ class ControlFlowGraph(VGroup):
         entry: str | None = None,
         positions: Mapping[str, Sequence[float]] | None = None,
         block_width: float = 4.45,
+        compact_addresses: bool = False,
         horizontal_gap: float = 0.75,
         vertical_gap: float = 0.85,
         theme: RevTheme = DEFAULT_THEME,
@@ -308,8 +484,8 @@ class ControlFlowGraph(VGroup):
         super().__init__()
         if not blocks:
             raise ValueError("a control-flow graph requires at least one block")
-        if horizontal_gap < 0 or vertical_gap < 0:
-            raise ValueError("CFG layout gaps must be non-negative")
+        if horizontal_gap < _MIN_CFG_GAP or vertical_gap < _MIN_CFG_GAP:
+            raise ValueError(f"CFG layout gaps must be at least {_MIN_CFG_GAP:.2f}")
         self.theme = theme
         self.specs = tuple(
             block.spec if isinstance(block, BasicBlock) else block for block in blocks
@@ -334,10 +510,16 @@ class ControlFlowGraph(VGroup):
             block = (
                 item
                 if isinstance(item, BasicBlock)
-                else BasicBlock(item, width=block_width, theme=theme)
+                else BasicBlock(
+                    item,
+                    width=block_width,
+                    compact_addresses=compact_addresses,
+                    theme=theme,
+                )
             )
             self.block_mobjects[block.key] = block
 
+        self._back_edge_indices = self._find_back_edges(keys)
         self.levels = self._compute_levels(keys)
         self.layers = self._position_layers(keys, horizontal_gap, vertical_gap)
         for key, position in normalized_positions.items():
@@ -352,29 +534,31 @@ class ControlFlowGraph(VGroup):
         }
 
         self.edge_mobjects: dict[tuple[str, str, EdgeKind], _CFGEdge] = {}
-        pair_counts: defaultdict[tuple[str, str], int] = defaultdict(int)
         edge_group = VGroup()
-        for spec in self.edge_specs:
+        routes = self._edge_routes()
+        label_obstacles: list[Mobject] = [
+            block.background for block in self.block_mobjects.values()
+        ]
+        for index, spec in enumerate(self.edge_specs):
             kind = EdgeKind(spec.kind)
             edge_key = (spec.source, spec.target, kind)
             if edge_key in self.edge_mobjects:
                 raise ValueError(f"duplicate {kind.value} edge {spec.source!r} -> {spec.target!r}")
-            source_level = self.levels[spec.source]
-            target_level = self.levels[spec.target]
-            path_arc = 0.0
-            if target_level <= source_level:
-                path_arc = 0.52 + pair_counts[(spec.source, spec.target)] * 0.12
-            pair_counts[(spec.source, spec.target)] += 1
+            start, end, route_lane_x, label_side = routes[index]
             edge_view = _CFGEdge(
                 spec,
-                self.block(spec.source),
-                self.block(spec.target),
+                start=start,
+                end=end,
                 color=_edge_color(kind, theme),
-                path_arc=path_arc,
+                route_lane_x=route_lane_x,
+                label_side=label_side,
+                obstacles=tuple(label_obstacles),
                 theme=theme,
             )
             self.edge_mobjects[edge_key] = edge_view
             edge_group.add(edge_view)
+            if edge_view.label_background is not None:
+                label_obstacles.append(edge_view.label_background)
 
         block_group = VGroup(*(self.block_mobjects[key] for key in keys))
         self.edges_group = edge_group
@@ -412,28 +596,209 @@ class ControlFlowGraph(VGroup):
             normalized[key] = (values[0], values[1], values[2])
         return normalized
 
+    def _find_back_edges(self, keys: Sequence[str]) -> set[int]:
+        """Return explicit loop and DFS back-edge indices in stable order."""
+
+        adjacency: dict[str, list[tuple[int, str]]] = {key: [] for key in keys}
+        back_edges = {
+            index
+            for index, edge in enumerate(self.edge_specs)
+            if EdgeKind(edge.kind) is EdgeKind.LOOP or edge.source == edge.target
+        }
+        for index, edge in enumerate(self.edge_specs):
+            if index not in back_edges:
+                adjacency[edge.source].append((index, edge.target))
+
+        state = {key: 0 for key in keys}
+        for root in (self.entry, *(key for key in keys if key != self.entry)):
+            if state[root] != 0:
+                continue
+            state[root] = 1
+            stack = [(root, iter(adjacency[root]))]
+            while stack:
+                source, children = stack[-1]
+                try:
+                    index, target = next(children)
+                except StopIteration:
+                    state[source] = 2
+                    stack.pop()
+                    continue
+                if state[target] == 0:
+                    state[target] = 1
+                    stack.append((target, iter(adjacency[target])))
+                elif state[target] == 1:
+                    back_edges.add(index)
+        return back_edges
+
     def _compute_levels(self, keys: Sequence[str]) -> dict[str, int]:
-        adjacency: dict[str, list[str]] = {key: [] for key in keys}
-        for edge in self.edge_specs:
-            if edge.target not in adjacency[edge.source]:
-                adjacency[edge.source].append(edge.target)
+        """Rank nodes by longest forward path, stacking disconnected components."""
+
+        order = {key: index for index, key in enumerate(keys)}
+        successors: dict[str, list[str]] = {key: [] for key in keys}
+        predecessors: dict[str, list[str]] = {key: [] for key in keys}
+        neighbors: dict[str, list[str]] = {key: [] for key in keys}
+        for index, edge in enumerate(self.edge_specs):
+            neighbors[edge.source].append(edge.target)
+            neighbors[edge.target].append(edge.source)
+            if index in self._back_edge_indices:
+                continue
+            if edge.target not in successors[edge.source]:
+                successors[edge.source].append(edge.target)
+                predecessors[edge.target].append(edge.source)
+
+        components: list[tuple[str, ...]] = []
+        remaining = set(keys)
+        component_roots = (self.entry, *(key for key in keys if key != self.entry))
+        for root in component_roots:
+            if root not in remaining:
+                continue
+            queue: deque[str] = deque((root,))
+            remaining.remove(root)
+            members: list[str] = []
+            while queue:
+                node = queue.popleft()
+                members.append(node)
+                for neighbor in sorted(neighbors[node], key=order.__getitem__):
+                    if neighbor in remaining:
+                        remaining.remove(neighbor)
+                        queue.append(neighbor)
+            components.append(tuple(sorted(members, key=order.__getitem__)))
 
         levels: dict[str, int] = {}
-        roots = [self.entry, *(key for key in keys if key != self.entry)]
-        for root in roots:
-            if root in levels:
-                continue
-            base_level = max(levels.values(), default=-1) + 1
-            queue: deque[str] = deque((root,))
-            levels[root] = base_level
-            while queue:
-                source = queue.popleft()
-                for target in adjacency[source]:
-                    if target in levels:
+        next_base = 0
+        for component_nodes in components:
+            component_set = set(component_nodes)
+            indegree = {
+                node: sum(pred in component_set for pred in predecessors[node])
+                for node in component_nodes
+            }
+            ready = deque(node for node in component_nodes if indegree[node] == 0)
+            topo_order: list[str] = []
+            while ready:
+                node = ready.popleft()
+                topo_order.append(node)
+                for target in successors[node]:
+                    if target not in component_set:
                         continue
-                    levels[target] = levels[source] + 1
-                    queue.append(target)
+                    indegree[target] -= 1
+                    if indegree[target] == 0:
+                        ready.append(target)
+            if len(topo_order) != len(component_nodes):
+                raise RuntimeError("CFG forward-edge classification did not produce a DAG")
+
+            local_levels: dict[str, int] = {}
+            for node in topo_order:
+                incoming = [
+                    local_levels[pred] for pred in predecessors[node] if pred in local_levels
+                ]
+                local_levels[node] = max(incoming, default=-1) + 1
+            for node in component_nodes:
+                levels[node] = next_base + local_levels[node]
+            next_base = max(levels[node] for node in component_nodes) + 1
         return levels
+
+    @staticmethod
+    def _spread_offsets(count: int, span: float) -> tuple[float, ...]:
+        if count <= 1:
+            return (0.0,)
+        return tuple(-span / 2 + span * index / (count - 1) for index in range(count))
+
+    def _edge_routes(
+        self,
+    ) -> dict[int, tuple[Any, Any, float | None, float]]:
+        """Resolve stable block ports and outside lanes from final block positions."""
+
+        vertical_indices = [
+            index
+            for index, edge in enumerate(self.edge_specs)
+            if index not in self._back_edge_indices
+            and self.levels[edge.target] == self.levels[edge.source] + 1
+            and self.block(edge.target).get_y() < self.block(edge.source).get_y() - 0.12
+        ]
+        horizontal_indices = [
+            index
+            for index, edge in enumerate(self.edge_specs)
+            if index not in self._back_edge_indices
+            and self.levels[edge.target] == self.levels[edge.source] + 1
+            and abs(self.block(edge.target).get_y() - self.block(edge.source).get_y()) <= 0.12
+            and abs(self.block(edge.target).get_x() - self.block(edge.source).get_x()) > 0.12
+        ]
+        outgoing: defaultdict[str, list[int]] = defaultdict(list)
+        incoming: defaultdict[str, list[int]] = defaultdict(list)
+        for index in vertical_indices:
+            edge = self.edge_specs[index]
+            outgoing[edge.source].append(index)
+            incoming[edge.target].append(index)
+
+        source_offsets: dict[int, float] = {}
+        target_offsets: dict[int, float] = {}
+        for source, indices in outgoing.items():
+            indices.sort(
+                key=lambda index: (
+                    self.block(self.edge_specs[index].target).get_x(),
+                    index,
+                )
+            )
+            span = min(self.block(source).width * 0.7, 1.25)
+            source_offsets.update(
+                zip(indices, self._spread_offsets(len(indices), span), strict=True)
+            )
+        for target, indices in incoming.items():
+            indices.sort(
+                key=lambda index: (
+                    self.block(self.edge_specs[index].source).get_x(),
+                    index,
+                )
+            )
+            span = min(self.block(target).width * 0.7, 1.25)
+            target_offsets.update(
+                zip(indices, self._spread_offsets(len(indices), span), strict=True)
+            )
+
+        left_bound = min(block.get_left()[0] for block in self.block_mobjects.values())
+        right_bound = max(block.get_right()[0] for block in self.block_mobjects.values())
+        center_x = (left_bound + right_bound) / 2
+        lane_counts = {"left": 0, "right": 0}
+        routes: dict[int, tuple[Any, Any, float | None, float]] = {}
+        for index, edge in enumerate(self.edge_specs):
+            source = self.block(edge.source)
+            target = self.block(edge.target)
+            if index in vertical_indices:
+                start = source.get_bottom() + RIGHT * source_offsets[index]
+                end = target.get_top() + RIGHT * target_offsets[index]
+                label_side = -1 if target.get_x() < source.get_x() else 1
+                routes[index] = (start, end, None, label_side)
+                continue
+            if index in horizontal_indices:
+                if target.get_x() > source.get_x():
+                    start = source.get_right()
+                    end = target.get_left()
+                    label_side = 1
+                else:
+                    start = source.get_left()
+                    end = target.get_right()
+                    label_side = -1
+                routes[index] = (start, end, None, label_side)
+                continue
+
+            average_x = (source.get_x() + target.get_x()) / 2
+            side = "right" if average_x >= center_x else "left"
+            lane_index = lane_counts[side]
+            lane_counts[side] += 1
+            if side == "right":
+                port_offset = min(source.height, target.height) * 0.24
+                start = source.get_right() + UP * port_offset
+                end = target.get_right() + DOWN * port_offset
+                lane_x = right_bound + 0.46 + lane_index * 0.22
+                label_side = -1
+            else:
+                port_offset = min(source.height, target.height) * 0.24
+                start = source.get_left() + UP * port_offset
+                end = target.get_left() + DOWN * port_offset
+                lane_x = left_bound - 0.46 - lane_index * 0.22
+                label_side = 1
+            routes[index] = (start, end, lane_x, label_side)
+        return routes
 
     def _position_layers(
         self,
@@ -526,10 +891,10 @@ class ControlFlowGraph(VGroup):
             raise LookupError(f"control-flow graph cannot resolve {target!r}")
         return AnimationGroup(
             *(
-                Indicate(
-                    mobject,
+                Circumscribe(
+                    mobject.background if isinstance(mobject, BasicBlock) else mobject,
                     color=color or self.theme.warning,
-                    scale_factor=scale_factor,
+                    buff=max(0.04, (scale_factor - 1) * 0.7),
                 )
                 for mobject in targets
             )
@@ -549,12 +914,12 @@ class ControlFlowGraph(VGroup):
         for key in path:
             self.block(key)
 
-        traversal_color = color or self.theme.warning
+        traversal_color = color or self.theme.info
         animations: list[Animation] = [
-            Indicate(
-                self.block(path[0]),
+            Circumscribe(
+                self.block(path[0]).background,
                 color=traversal_color,
-                scale_factor=1.04,
+                buff=0.05,
                 run_time=run_time,
             )
         ]
@@ -567,10 +932,10 @@ class ControlFlowGraph(VGroup):
                         time_width=0.55,
                         run_time=run_time,
                     ),
-                    Indicate(
-                        self.block(target),
+                    Circumscribe(
+                        self.block(target).background,
                         color=traversal_color,
-                        scale_factor=1.04,
+                        buff=0.05,
                         run_time=run_time,
                     ),
                 )

@@ -217,7 +217,7 @@ def make_contact_sheets(
                 gutter + columns * (thumb_size[0] + gutter),
                 gutter + rows * (thumb_size[1] + caption_height + gutter),
             ),
-            "#090D16",
+            "#000000",
         )
         draw = ImageDraw.Draw(sheet)
         for index, scene in enumerate(items):
@@ -231,7 +231,7 @@ def make_contact_sheets(
             caption = scene.scene
             if scene.warnings:
                 caption += "  [review]"
-            draw.text((x + 3, y + thumb_size[1] + 7), caption, fill="#ECF3FF", font=_font(15))
+            draw.text((x + 3, y + thumb_size[1] + 7), caption, fill="#FFFFFF", font=_font(15))
         output = output_dir / f"{category}.png"
         output.parent.mkdir(parents=True, exist_ok=True)
         sheet.save(output)
@@ -263,7 +263,7 @@ def make_timeline_sheets(
                 gutter + len(labels) * (thumb_size[0] + gutter),
                 gutter + len(items) * (thumb_size[1] + caption_height + gutter),
             ),
-            "#090D16",
+            "#000000",
         )
         draw = ImageDraw.Draw(sheet)
         for row, scene in enumerate(items):
@@ -275,14 +275,14 @@ def make_timeline_sheets(
                 frame = Image.open(project_root / frame_metrics.path).convert("RGB")
                 thumbnail = ImageOps.fit(frame, thumb_size, method=Image.Resampling.LANCZOS)
                 sheet.paste(thumbnail, (x, y))
-                draw.text((x + 5, y + 5), label, fill="#ECF3FF", font=_font(12))
+                draw.text((x + 5, y + 5), label, fill="#FFFFFF", font=_font(12))
             caption = scene.scene
             if scene.warnings:
                 caption += "  [review]"
             draw.text(
                 (gutter + 3, y + thumb_size[1] + 6),
                 caption,
-                fill="#ECF3FF",
+                fill="#FFFFFF",
                 font=_font(14),
             )
         output = output_dir / f"{category}-timeline.png"

@@ -7,28 +7,28 @@ from dataclasses import dataclass, replace
 
 @dataclass(frozen=True, slots=True)
 class RevTheme:
-    """A compact, high-contrast palette designed for projected slides."""
+    """A restrained palette built from Manim Community's default colors."""
 
-    background: str = "#090D16"
-    panel: str = "#121A2A"
-    panel_alt: str = "#182236"
-    border: str = "#3A4965"
-    text: str = "#ECF3FF"
-    muted: str = "#91A0BA"
-    address: str = "#62D9FF"
-    opcode: str = "#B89CFF"
-    register: str = "#FFCB6B"
-    immediate: str = "#F78C6C"
-    success: str = "#5DE4A8"
-    warning: str = "#FFD166"
-    danger: str = "#FF5C7A"
-    info: str = "#5EA1FF"
-    taint: str = "#FF7EDB"
-    branch_true: str = "#5DE4A8"
-    branch_false: str = "#FF6B81"
-    fallthrough: str = "#62D9FF"
-    call: str = "#B89CFF"
-    loop: str = "#FFD166"
+    background: str = "#000000"
+    panel: str = "#111111"
+    panel_alt: str = "#222222"
+    border: str = "#888888"
+    text: str = "#FFFFFF"
+    muted: str = "#BBBBBB"
+    address: str = "#58C4DD"
+    opcode: str = "#58C4DD"
+    register: str = "#FFFFFF"
+    immediate: str = "#F0AC5F"
+    success: str = "#83C167"
+    warning: str = "#F7D96F"
+    danger: str = "#FC6255"
+    info: str = "#58C4DD"
+    taint: str = "#9A72AC"
+    branch_true: str = "#83C167"
+    branch_false: str = "#FC6255"
+    fallthrough: str = "#888888"
+    call: str = "#58C4DD"
+    loop: str = "#F7D96F"
     mono_font: str = "monospace"
     sans_font: str = "sans-serif"
 
@@ -45,24 +45,24 @@ def light_theme() -> RevTheme:
     """Return a projector-friendly light alternative."""
 
     return RevTheme(
-        background="#F5F7FB",
+        background="#FFFFFF",
         panel="#FFFFFF",
-        panel_alt="#E9EEF7",
-        border="#8390A8",
-        text="#111827",
-        muted="#5B6577",
-        address="#006D9C",
-        opcode="#6542B5",
-        register="#9A6200",
-        immediate="#B64220",
-        success="#087F5B",
-        warning="#9A6700",
-        danger="#C32745",
-        info="#245BCE",
-        taint="#B51E8C",
-        branch_true="#087F5B",
-        branch_false="#C32745",
-        fallthrough="#006D9C",
-        call="#6542B5",
-        loop="#9A6700",
+        panel_alt="#EEEEEE",
+        border="#888888",
+        text="#000000",
+        muted="#444444",
+        address="#29ABCA",
+        opcode="#29ABCA",
+        register="#000000",
+        immediate="#C78D46",
+        success="#699C52",
+        warning="#C78D46",
+        danger="#E04A3F",
+        info="#29ABCA",
+        taint="#715582",
+        branch_true="#699C52",
+        branch_false="#E04A3F",
+        fallthrough="#888888",
+        call="#29ABCA",
+        loop="#C78D46",
     )

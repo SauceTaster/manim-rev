@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from manim import DOWN, UP, FadeIn, Scene, VGroup
 
-from .primitives import label_text, mono_text
+from .primitives import label_text
 from .theme import DEFAULT_THEME, RevTheme
 
 
 class RevScene(Scene):
-    """A Scene with a dark default palette and presentation helpers."""
+    """A Scene with Manim-colored defaults and presentation helpers."""
 
     theme: RevTheme = DEFAULT_THEME
 
@@ -27,9 +27,9 @@ class RevScene(Scene):
         )
         parts = VGroup(heading)
         if subtitle:
-            subheading = mono_text(
+            subheading = label_text(
                 subtitle,
-                font_size=23,
+                font_size=22,
                 color=self.theme.muted,
                 theme=self.theme,
             )

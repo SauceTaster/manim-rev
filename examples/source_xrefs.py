@@ -106,6 +106,7 @@ class SourceXRefWalkthrough(RevScene):
                 CFGEdgeSpec("check", "reject", EdgeKind.TRUE, "ZF = 0"),
             ),
             block_width=3.15,
+            compact_addresses=True,
             horizontal_gap=0.38,
             vertical_gap=0.46,
             theme=self.theme,

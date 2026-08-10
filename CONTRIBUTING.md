@@ -44,6 +44,9 @@ uv run pytest
   `CHANGELOG.md`.
 - Keep optional integrations behind their corresponding extras. Core imports
   must continue to work without angr or Capstone installed.
+- Preserve the Manim-native visual direction: use flat structure and theme
+  tokens, reserve accent colors for semantic state, and avoid decorative
+  terminal, HUD, glow, scan-line, or dashboard chrome.
 
 The package is alpha, but compatibility still matters. If a change must break
 an existing public API, explain the reason and migration path in the pull
@@ -78,6 +81,18 @@ sheets:
 uv run python scripts/render_examples.py --jobs 2
 uv run python scripts/qa_examples.py
 ```
+
+After approving a full visual review, synchronize the retained documentation
+contact sheets and six Pages demo videos from the generated report:
+
+```bash
+uv run python scripts/sync_visual_assets.py
+uv run python scripts/sync_visual_assets.py --check
+uv run python scripts/check_site.py site
+```
+
+Do not publish regenerated assets until their early, middle, and final frames
+have received the human review below.
 
 Automated heuristics only flag likely problems. Review representative early,
 middle, and final frames and verify:

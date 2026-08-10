@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#080b12">
+    <meta name="theme-color" content="#000000">
     <meta
       name="description"
       content="Manim Rev is an open-source Manim Community Edition plugin for visualizing reverse engineering, program analysis, CPU behavior, and vulnerabilities."
@@ -35,8 +35,8 @@
           <span>manim<span class="brand-accent">_rev</span></span>
         </a>
         <nav aria-label="Primary navigation">
-          <a aria-current="page" href="./">Overview</a>
-          <a href="examples.html">Examples</a>
+          <a class="nav-overview" aria-current="page" href="./">Overview</a>
+          <a class="nav-examples" href="examples.html">Examples</a>
           <a href="https://github.com/SauceTaster/manim-rev/tree/main/docs">Docs</a>
           <a class="nav-github" href="https://github.com/SauceTaster/manim-rev">GitHub <span aria-hidden="true">↗</span></a>
         </nav>
@@ -46,12 +46,7 @@
     <main id="main-content">
       <section class="hero shell" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <div class="status-line">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span>v0.1.0 release candidate</span>
-            <span aria-hidden="true">·</span>
-            <span>Alpha</span>
-          </div>
+          <p class="release-state"><span aria-hidden="true"></span>Alpha release candidate · v0.1.0</p>
           <p class="eyebrow">Manim Community Edition plugin</p>
           <h1 id="hero-title">Reverse engineering,<br><span>made visible.</span></h1>
           <p class="hero-lede">
@@ -69,35 +64,38 @@
           </p>
         </div>
 
-        <div class="hero-visual" role="img" aria-label="Illustration of source code connected to a control-flow graph and execution trace">
-          <div class="window-bar">
-            <span></span><span></span><span></span>
-            <code>recover_password.scene</code>
-          </div>
-          <div class="terminal-grid">
-            <div class="code-pane" aria-hidden="true">
-              <p><b>0x401000</b> test <em>eax, eax</em></p>
-              <p class="active"><b>0x401002</b> jne <em>0x401019</em></p>
-              <p><b>0x401004</b> call <em>check_key</em></p>
-              <p><b>0x401009</b> mov <em>byte [rbx], 1</em></p>
-            </div>
-            <div class="flow-pane" aria-hidden="true">
-              <div class="flow-node">entry <small>0x401000</small></div>
-              <span class="flow-arrow">↓</span>
-              <div class="flow-split">
-                <div class="flow-node pass">valid <small>ZF = 1</small></div>
-                <div class="flow-node fail">reject <small>ZF = 0</small></div>
+        <figure class="hero-visual" role="img" aria-label="A clean control-flow graph with an entry basic block branching to valid and reject blocks">
+          <figcaption>
+            <strong>Control flow graph</strong>
+            <span>Basic blocks · typed edges</span>
+          </figcaption>
+          <div class="cfg-canvas" aria-hidden="true">
+            <article class="basic-block cfg-entry">
+              <header><strong>check input</strong><code>0x401000</code></header>
+              <div><code>0x401000</code><b>test</b><span>eax, eax</span></div>
+              <div><code>0x401002</code><b>jne</b><span>0x401019</span></div>
+            </article>
+            <div class="cfg-branches">
+              <div class="cfg-path path-valid">
+                <span class="edge-label">false</span>
+                <article class="basic-block">
+                  <header><strong>valid</strong><code>0x401004</code></header>
+                  <div><code>0x401004</code><b>call</b><span>check_key</span></div>
+                  <div><code>0x401009</code><b>mov</b><span>byte [rbx], 1</span></div>
+                </article>
+              </div>
+              <div class="cfg-path path-reject">
+                <span class="edge-label">true</span>
+                <article class="basic-block">
+                  <header><strong>reject</strong><code>0x401019</code></header>
+                  <div><code>0x401019</code><b>xor</b><span>eax, eax</span></div>
+                  <div><code>0x40101b</code><b>ret</b><span></span></div>
+                </article>
               </div>
             </div>
-            <div class="trace-pane" aria-hidden="true">
-              <span class="trace-label">LIVE TRACE</span>
-              <div><i>01</i><code>0x401000</code><span>ZF 0</span></div>
-              <div class="current"><i>02</i><code>0x401002</code><span>ZF 1</span></div>
-              <div><i>03</i><code>0x401004</code><span>CALL</span></div>
-            </div>
           </div>
-          <div class="visual-caption"><span>semantic address</span><code>0x401002</code><span>joins every view</span></div>
-        </div>
+          <p class="figure-note"><span class="key key-blue"></span>fallthrough <span class="key key-red"></span>taken branch</p>
+        </figure>
       </section>
 
       <section class="proof-strip" aria-label="Project facts">
@@ -150,22 +148,22 @@
             <p>Each component is a regular Manim mobject with deliberate animation helpers and semantic lookups.</p>
           </div>
           <div class="feature-grid">
-            <article class="feature-card cyan">
+            <article class="feature-card blue">
               <span class="feature-token" aria-hidden="true">CFG</span>
               <h3>Control flow</h3>
               <p>Basic blocks, typed edges, traversals, loops, calls, and manually positioned dense graphs.</p>
             </article>
-            <article class="feature-card blue">
+            <article class="feature-card green">
               <span class="feature-token" aria-hidden="true">RIP</span>
               <h3>Debugging</h3>
               <p>Instruction traces, breakpoints, pre/post state, repeated addresses, registers, and flags.</p>
             </article>
-            <article class="feature-card magenta">
+            <article class="feature-card yellow">
               <span class="feature-token" aria-hidden="true">0x41</span>
               <h3>Memory</h3>
               <p>Addressable hex dumps, exact byte ranges, reads and writes, memory maps, and permissions.</p>
             </article>
-            <article class="feature-card amber">
+            <article class="feature-card red">
               <span class="feature-token" aria-hidden="true">IF›ID</span>
               <h3>CPU internals</h3>
               <p>Instruction encodings, data paths, pipeline stages, stalls, forwarding, and squashes.</p>
@@ -175,7 +173,7 @@
               <h3>Fuzzing</h3>
               <p>Coverage growth, corpus evolution, crash discovery, reproduction, and deduplication.</p>
             </article>
-            <article class="feature-card violet">
+            <article class="feature-card blue">
               <span class="feature-token" aria-hidden="true">SAT?</span>
               <h3>Symbolic execution</h3>
               <p>Forking state trees, path constraints, solver outcomes, and angr-style state stashes.</p>
@@ -185,7 +183,7 @@
               <h3>Vulnerabilities</h3>
               <p>Stack overwrites, taint paths, sinks, finding cards, and evidence-driven triage.</p>
             </article>
-            <article class="feature-card cyan">
+            <article class="feature-card blue">
               <span class="feature-token" aria-hidden="true">XREF</span>
               <h3>Source analysis</h3>
               <p>Source listings, lowered instructions, incoming and outgoing references, and linked views.</p>

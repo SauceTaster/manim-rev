@@ -35,8 +35,10 @@ The release workflow intentionally contains no long-lived PyPI token.
 4. Move the relevant changelog entries from `Unreleased` to a dated version
    heading, add a link to the matching GitHub tag, and leave a new empty
    `Unreleased` section.
-5. Update the README status and installation text so it describes the release
-   being made; do not claim PyPI availability before publication succeeds.
+5. Update the README and Pages status/installation text so both describe the
+   release being made; do not claim PyPI availability before publication
+   succeeds. Run `uv run python scripts/check_site.py site` after changing the
+   site copy.
 6. Run `uv lock` if dependency metadata changed.
 7. Run the complete verification suite:
 
@@ -49,12 +51,16 @@ The release workflow intentionally contains no long-lived PyPI token.
    uv run python scripts/render_examples.py --list
    uv run python scripts/render_examples.py --jobs 2
    uv run python scripts/qa_examples.py
+   uv run python scripts/check_site.py site
+   uv run python scripts/sync_visual_assets.py --check
    uv build
    uvx --from twine==6.2.0 twine check --strict dist/*
    ```
 
 8. Review the generated QA report and contact sheets. Resolve warnings or
-   record why each remaining warning is an acceptable false positive.
+   record why each remaining warning is an acceptable false positive. After
+   approval, run `uv run python scripts/sync_visual_assets.py`, then repeat it
+   with `--check` to confirm the retained docs and Pages assets are current.
 9. Merge the release preparation through the protected default branch.
 
 ## Publish

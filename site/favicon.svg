@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <title>Manim Rev</title>
-  <rect x="2" y="2" width="60" height="60" rx="12" fill="#0e1522" stroke="#2dd4bf" stroke-width="3"/>
-  <text x="32" y="40" text-anchor="middle" fill="#2dd4bf" font-family="ui-monospace, monospace" font-size="22" font-weight="700">MR</text>
+  <rect x="4" y="4" width="56" height="56" fill="#58C4DD"/>
+  <text x="32" y="40" text-anchor="middle" fill="#000000" font-family="ui-sans-serif, sans-serif" font-size="22" font-weight="800">MR</text>
 </svg>

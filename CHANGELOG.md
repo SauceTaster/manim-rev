@@ -28,4 +28,22 @@ validation. No `0.1.0` tag or PyPI release is claimed yet.
   accessibility accommodations, and pre-deployment link validation.
 - Contributor, security, citation, CI, and trusted-release infrastructure.
 
+### Changed
+
+- Reworked basic blocks as flat, square-edged instruction diagrams with shared
+  columns, fitted headers, and non-destructive outline focus animations.
+- Replaced shortest-path CFG layering with deterministic longest-forward-path
+  ranks so merge blocks remain below every incoming branch.
+- Added distributed edge ports, side-to-side manual routes, outside loop lanes,
+  backed labels, and neutral fallthrough/unconditional edges for clearer dense
+  graphs.
+- Preserved complete instruction addresses by default and added opt-in,
+  ellipsis-marked compact numeric addresses for deliberately small talk blocks.
+- Rejected block widths below `2.25` (`3.10` with instruction bytes) and CFG
+  layout gaps below `0.25` instead of accepting geometry that can overflow or
+  collapse an edge.
+- Aligned the default themes, scene titles, examples, contact sheets, and GitHub
+  Pages site with Manim Community's black/white/gray visual language and core
+  blue, green, yellow, and red accents.
+
 [Unreleased]: https://github.com/SauceTaster/manim-rev/commits/main
