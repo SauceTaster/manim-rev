@@ -16,29 +16,29 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "archinfo", version = "9.2.213", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "cachetools", marker = "python_full_version < '3.12'" },
-    { name = "capstone", version = "5.0.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "cffi", marker = "python_full_version < '3.12'" },
-    { name = "claripy", version = "9.2.213", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "cle", version = "9.2.213", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "colorama", marker = "python_full_version < '3.12' and sys_platform == 'win32'" },
-    { name = "cxxheaderparser", marker = "python_full_version < '3.12'" },
-    { name = "gitpython", marker = "python_full_version < '3.12'" },
-    { name = "lmdb", marker = "python_full_version < '3.12'" },
-    { name = "msgspec", marker = "python_full_version < '3.12' and implementation_name == 'cpython'" },
-    { name = "mulpyplexer", marker = "python_full_version < '3.12'" },
-    { name = "networkx", marker = "python_full_version < '3.12'" },
-    { name = "protobuf", marker = "python_full_version < '3.12'" },
-    { name = "psutil", marker = "python_full_version < '3.12'" },
-    { name = "pycparser", marker = "python_full_version < '3.12'" },
-    { name = "pydemumble", version = "0.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "pypcode", version = "3.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "pyvex", version = "9.2.213", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "rich", marker = "python_full_version < '3.12'" },
-    { name = "sortedcontainers", marker = "python_full_version < '3.12'" },
-    { name = "sympy", marker = "python_full_version < '3.12'" },
-    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+    { name = "archinfo", version = "9.2.213", source = { registry = "https://pypi.org/simple" } },
+    { name = "cachetools" },
+    { name = "capstone", version = "5.0.6", source = { registry = "https://pypi.org/simple" } },
+    { name = "cffi" },
+    { name = "claripy", version = "9.2.213", source = { registry = "https://pypi.org/simple" } },
+    { name = "cle", version = "9.2.213", source = { registry = "https://pypi.org/simple" } },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "cxxheaderparser" },
+    { name = "gitpython" },
+    { name = "lmdb" },
+    { name = "msgspec", marker = "implementation_name == 'cpython'" },
+    { name = "mulpyplexer" },
+    { name = "networkx" },
+    { name = "protobuf" },
+    { name = "psutil" },
+    { name = "pycparser" },
+    { name = "pydemumble", version = "0.1.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "pypcode", version = "3.3.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "pyvex", version = "9.2.213", source = { registry = "https://pypi.org/simple" } },
+    { name = "rich" },
+    { name = "sortedcontainers" },
+    { name = "sympy" },
+    { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/32/cc/fc2c05157b0d7d65b919f33ceba47a3e324a4bc965bf9fea0283c4b2de93/angr-9.2.213.tar.gz", hash = "sha256:773ca0912107f64332ae0d98676300c03d3df79b7d507bbb223c65d076505c93", size = 4163352, upload-time = "2026-04-28T18:04:51.768Z" }
 wheels = [
@@ -70,31 +70,31 @@ resolution-markers = [
     "python_full_version == '3.12.*'",
 ]
 dependencies = [
-    { name = "angr-data", marker = "python_full_version >= '3.12'" },
-    { name = "archinfo", version = "9.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "cachetools", marker = "python_full_version >= '3.12'" },
-    { name = "capstone", version = "5.0.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "cffi", marker = "python_full_version >= '3.12'" },
-    { name = "claripy", version = "9.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "cle", version = "9.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "colorama", marker = "python_full_version >= '3.12' and sys_platform == 'win32'" },
-    { name = "cxxheaderparser", marker = "python_full_version >= '3.12'" },
-    { name = "gitpython", marker = "python_full_version >= '3.12'" },
-    { name = "lmdb", marker = "python_full_version >= '3.12'" },
-    { name = "msgspec", marker = "python_full_version >= '3.12' and implementation_name == 'cpython'" },
-    { name = "mulpyplexer", marker = "python_full_version >= '3.12'" },
-    { name = "networkx", marker = "python_full_version >= '3.12'" },
-    { name = "platformdirs", marker = "python_full_version >= '3.12'" },
-    { name = "protobuf", marker = "python_full_version >= '3.12'" },
-    { name = "psutil", marker = "python_full_version >= '3.12'" },
-    { name = "pycparser", marker = "python_full_version >= '3.12'" },
-    { name = "pydemumble", version = "0.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "pypcode", version = "4.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "pyvex", version = "9.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "rich", marker = "python_full_version >= '3.12'" },
-    { name = "sortedcontainers", marker = "python_full_version >= '3.12'" },
-    { name = "sympy", marker = "python_full_version >= '3.12'" },
-    { name = "typing-extensions", marker = "python_full_version >= '3.12'" },
+    { name = "angr-data" },
+    { name = "archinfo", version = "9.3.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "cachetools" },
+    { name = "capstone", version = "5.0.9", source = { registry = "https://pypi.org/simple" } },
+    { name = "cffi" },
+    { name = "claripy", version = "9.3.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "cle", version = "9.3.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "cxxheaderparser" },
+    { name = "gitpython" },
+    { name = "lmdb" },
+    { name = "msgspec", marker = "implementation_name == 'cpython'" },
+    { name = "mulpyplexer" },
+    { name = "networkx" },
+    { name = "platformdirs" },
+    { name = "protobuf" },
+    { name = "psutil" },
+    { name = "pycparser" },
+    { name = "pydemumble", version = "0.1.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "pypcode", version = "4.0.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "pyvex", version = "9.3.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "rich" },
+    { name = "sortedcontainers" },
+    { name = "sympy" },
+    { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c2/1f/f185cc015a24fdde44927f0b1cbabf6a070867a74f12b75dc1d29bb67fa0/angr-9.3.2.tar.gz", hash = "sha256:0b4032332a55105daa98620158c9b3edcaefe7f7f862970a56d27dae0658e15f", size = 2351990, upload-time = "2026-08-05T09:04:15.016Z" }
 wheels = [
@@ -562,9 +562,9 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "cachetools", marker = "python_full_version < '3.12'" },
-    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
-    { name = "z3-solver", marker = "python_full_version < '3.12'" },
+    { name = "cachetools" },
+    { name = "typing-extensions" },
+    { name = "z3-solver" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/4f/fc/1995734fd0ac68503c7aba645555454f7b2aa94bc995f9c36eba0ab9d346/claripy-9.2.213.tar.gz", hash = "sha256:2205ab333f26d03271951584e6bfd8c9bd4247e9a93f27ba4078ba745baabf2f", size = 147567, upload-time = "2026-04-28T18:04:56.55Z" }
 wheels = [
@@ -581,8 +581,8 @@ resolution-markers = [
     "python_full_version == '3.12.*'",
 ]
 dependencies = [
-    { name = "cachetools", marker = "python_full_version >= '3.12'" },
-    { name = "z3-solver", marker = "python_full_version >= '3.12'" },
+    { name = "cachetools" },
+    { name = "z3-solver" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/59/94/b59db08b34451274e6b1e8e6f4437df237e1857f964a93e01deae16fb73b/claripy-9.3.2.tar.gz", hash = "sha256:cf1b31e4f6b8a601a2b6ede566e896416f14f81402a7e56363b6e99593f91d45", size = 147406, upload-time = "2026-08-05T09:04:23.567Z" }
 wheels = [
@@ -597,17 +597,17 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "archinfo", version = "9.2.213", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "arpy", marker = "python_full_version < '3.12'" },
-    { name = "cart", marker = "python_full_version < '3.12'" },
-    { name = "minidump", marker = "python_full_version < '3.12'" },
-    { name = "pefile", marker = "python_full_version < '3.12'" },
-    { name = "pyelftools", marker = "python_full_version < '3.12'" },
-    { name = "pyvex", version = "9.2.213", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "pyxbe", version = "1.0.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "pyxdia", version = "0.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "sortedcontainers", marker = "python_full_version < '3.12'" },
-    { name = "uefi-firmware", marker = "python_full_version < '3.12'" },
+    { name = "archinfo", version = "9.2.213", source = { registry = "https://pypi.org/simple" } },
+    { name = "arpy" },
+    { name = "cart" },
+    { name = "minidump" },
+    { name = "pefile" },
+    { name = "pyelftools" },
+    { name = "pyvex", version = "9.2.213", source = { registry = "https://pypi.org/simple" } },
+    { name = "pyxbe", version = "1.0.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "pyxdia", version = "0.1.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "sortedcontainers" },
+    { name = "uefi-firmware" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f5/55/cec8283b3ea283468d455239e573c56d75dbacf05c5a41e992e99cd38f76/cle-9.2.213.tar.gz", hash = "sha256:696ec95931d17ec19686efc436eea88152a72d355fbcee428452ac8fadb94335", size = 226878, upload-time = "2026-04-28T18:04:57.661Z" }
 wheels = [
@@ -624,17 +624,17 @@ resolution-markers = [
     "python_full_version == '3.12.*'",
 ]
 dependencies = [
-    { name = "archinfo", version = "9.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "arpy", marker = "python_full_version >= '3.12'" },
-    { name = "cart", marker = "python_full_version >= '3.12'" },
-    { name = "minidump", marker = "python_full_version >= '3.12'" },
-    { name = "pefile", marker = "python_full_version >= '3.12'" },
-    { name = "pyelftools", marker = "python_full_version >= '3.12'" },
-    { name = "pyvex", version = "9.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "pyxbe", version = "1.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "pyxdia", version = "0.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and sys_platform != 'emscripten'" },
-    { name = "sortedcontainers", marker = "python_full_version >= '3.12'" },
-    { name = "uefi-firmware", marker = "python_full_version >= '3.12' and sys_platform != 'emscripten'" },
+    { name = "archinfo", version = "9.3.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "arpy" },
+    { name = "cart" },
+    { name = "minidump" },
+    { name = "pefile" },
+    { name = "pyelftools" },
+    { name = "pyvex", version = "9.3.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "pyxbe", version = "1.0.4", source = { registry = "https://pypi.org/simple" } },
+    { name = "pyxdia", version = "0.1.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'emscripten'" },
+    { name = "sortedcontainers" },
+    { name = "uefi-firmware", marker = "sys_platform != 'emscripten'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0e/e7/e5d2419b429eba4242d897a9b3579bacbce1b342ed2e814410d2d42b6123/cle-9.3.2.tar.gz", hash = "sha256:011bd44b02ee389735152d238f82ac4ca341bd11b081d4de98566041e415dbf9", size = 230753, upload-time = "2026-08-05T09:04:24.758Z" }
 wheels = [
@@ -1062,7 +1062,7 @@ wheels = [
 
 [[package]]
 name = "manim"
-version = "0.20.1"
+version = "0.21.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "audioop-lts", marker = "python_full_version >= '3.13'" },
@@ -1094,9 +1094,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dc/3b/ad54ce02f3e95d17d016cb1254708ae3795b60d5661f3b2085655940a565/manim-0.20.1.tar.gz", hash = "sha256:1e9747fb2fc1bde58ad09bcbd77d141793ce4b61811726a7fce537193d92e16b", size = 553537, upload-time = "2026-02-27T07:32:53.54Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/2e/08d46ab1eb765f054cc9e4f64e95896d6fc53642c8f0e29c6c5c29028fe7/manim-0.21.0.tar.gz", hash = "sha256:2f3d719e726c9abf49b1bea503fb17510ee2063dab53915ab44a2c47c32f9a13", size = 580380, upload-time = "2026-08-10T21:58:34.544Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4b/74/7a54f81bbb3016036662c5497edc89c5d053a8ab1e8f7c8faaca5d43b174/manim-0.20.1-py3-none-any.whl", hash = "sha256:2c76784716aef88630eace2762645e1eb25f236fe750cb1b3c4fdd3558de49e1", size = 652109, upload-time = "2026-02-27T07:32:55.066Z" },
+    { url = "https://files.pythonhosted.org/packages/02/b9/52a764c6fd593055cd401ca1f5bae9701e0fca750ae7627d38a48869fc32/manim-0.21.0-py3-none-any.whl", hash = "sha256:021001097bb568372fa8f5d1dcf46ba085c8502c10efb2312ff45f19f7facb60", size = 679365, upload-time = "2026-08-10T21:58:32.824Z" },
 ]
 
 [[package]]
@@ -1127,7 +1127,7 @@ dev = [
 requires-dist = [
     { name = "angr", marker = "extra == 'angr'", specifier = ">=9.2" },
     { name = "capstone", marker = "extra == 'analysis'", specifier = ">=5" },
-    { name = "manim", specifier = ">=0.20.1,<0.21" },
+    { name = "manim", specifier = ">=0.20.1,<0.22" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.15" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6" },
@@ -2070,8 +2070,8 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "bitstring", marker = "python_full_version < '3.12'" },
-    { name = "cffi", marker = "python_full_version < '3.12' and implementation_name == 'cpython'" },
+    { name = "bitstring" },
+    { name = "cffi", marker = "implementation_name == 'cpython'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b2/d5/4df75aa08d1759bc67df8d3c1e1828605d38d2185dea81baff805c8a8742/pyvex-9.2.213.tar.gz", hash = "sha256:772a3588b5fdff1ca3b57379b2906a2f1ca1ee68290cd9c75a730183245d38fc", size = 3649139, upload-time = "2026-04-28T18:04:59.109Z" }
 wheels = [
@@ -2103,8 +2103,8 @@ resolution-markers = [
     "python_full_version == '3.12.*'",
 ]
 dependencies = [
-    { name = "bitstring", marker = "python_full_version >= '3.12'" },
-    { name = "cffi", marker = "python_full_version >= '3.12' and implementation_name == 'cpython'" },
+    { name = "bitstring" },
+    { name = "cffi", marker = "implementation_name == 'cpython'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/2f/e3/7bca8a9c506b70b5e53cfa17c59b0413c120aae377468f3de47dacd829df/pyvex-9.3.2.tar.gz", hash = "sha256:34d9c650257000cb83520be1db00686c074313a2fcecd6521342af10b8e61c8d", size = 3651684, upload-time = "2026-08-05T09:04:26.197Z" }
 wheels = [
@@ -2219,7 +2219,7 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7a/97/5a3609c4f8d58b039179648e62dd220f89864f56f7357f5d4f45c29eb2cc/scipy-1.17.1.tar.gz", hash = "sha256:95d8e012d8cb8816c226aef832200b1d45109ed4464303e997c5b13122b297c0", size = 30573822, upload-time = "2026-02-23T00:26:24.851Z" }
 wheels = [
@@ -2295,7 +2295,7 @@ resolution-markers = [
     "python_full_version == '3.12.*'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a7/25/c2700dfaf6442b4effaa91af24ebce5dc9d31bb4a69706313aae70d72cd0/scipy-1.18.0.tar.gz", hash = "sha256:67b2ad2ad54c72ca6d04975a9b2df8c3638c34ddd5b28738e94fc2b57929d378", size = 30774447, upload-time = "2026-06-19T15:01:43.456Z" }
 wheels = [
