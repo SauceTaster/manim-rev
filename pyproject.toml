@@ -31,7 +31,7 @@ classifiers = [
   "Topic :: Security",
   "Typing :: Typed",
 ]
-dependencies = ["manim>=0.20.1,<0.21"]
+dependencies = ["manim>=0.20.1,<0.22"]
 
 [project.urls]
 Homepage = "https://saucetaster.github.io/manim-rev/"
