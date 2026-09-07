@@ -47,7 +47,7 @@ dev = [
   "pytest-cov>=6",
   "ruff>=0.11",
 ]
-analysis = ["capstone>=5"]
+analysis = ["capstone>=5.0.9"]
 angr = ["angr>=9.2"]
 
 [project.entry-points."manim.plugins"]
